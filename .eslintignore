@@ -8,3 +8,4 @@ lib/
 _site/
 dist/
 components/version/version.tsx
+*.d.ts
