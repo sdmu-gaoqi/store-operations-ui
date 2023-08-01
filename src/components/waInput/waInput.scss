@@ -1,0 +1,73 @@
+$prefix-cls: 'wa-input';
+
+@mixin active-border {
+  background: transparent;
+  width: calc(100% + 20px);
+  left: -10px;
+  transition: all 0.4s;
+  transition-timing-function: ease-out;
+  height: 2px;
+}
+
+@mixin blur-border {
+  width: 0;
+}
+
+@mixin active-label {
+  background: transparent;
+  pointer-events: none;
+  cursor: default;
+  top: 0;
+  padding: 4px 5px;
+  z-index: 1;
+}
+
+@mixin valid-label {
+  cursor: text;
+}
+
+.#{$prefix-cls} {
+  &-wrapper {
+    position: relative;
+    box-sizing: border-box;
+    display: table;
+    line-height: normal;
+  }
+  &-label,
+  &-border {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  &-label {
+    cursor: text;
+    font-size: 12px;
+    overflow: visible;
+    &-focus {
+      @include active-label;
+    }
+    &-valid {
+      @include valid-label;
+    }
+  }
+  &-border {
+    transition: all 0.4s;
+    transition-timing-function: ease-out;
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    pointer-events: none;
+    width: 0;
+    height: 2px;
+    z-index: -1;
+    &-focus {
+      @include active-border;
+    }
+    &-valid {
+      @include blur-border;
+    }
+  }
+}
