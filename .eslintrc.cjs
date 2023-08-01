@@ -58,7 +58,7 @@ module.exports = {
     'import/no-named-as-default': 'off',
     'import/namespace': 0,
     'import/no-named-as-default-member': 'off',
-    'import/no-unresolved': [2, { ignore: ['ant-design-vue'] }],
+    'import/no-unresolved': 0,
     'comma-dangle': 0,
     'no-var': 'error',
     'no-console': [2, { allow: ['warn', 'error'] }],

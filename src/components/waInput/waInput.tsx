@@ -107,7 +107,7 @@ export default defineComponent({
         <div class={joinCss(prefixCls, ['wrapper'])}>
           <div class={joinCss(prefixCls, ['label'])} ref={labelRef}>
             {restProps.label}
-            <span ref={borderRef} class={joinCss(prefixCls, ['border'])}></span>
+            <div ref={borderRef} class={joinCss(prefixCls, ['border'])}></div>
           </div>
           <input
             ref={inputRef}

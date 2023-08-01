@@ -1,12 +1,15 @@
 $prefix-cls: 'wa-input';
 
+@mixin active-input {
+  border-color: $main-color;
+  outline: none;
+}
+
 @mixin active-border {
-  background: transparent;
+  top: 50%;
   width: calc(100% + 20px);
-  left: -10px;
-  transition: all 0.4s;
-  transition-timing-function: ease-out;
   height: 2px;
+  background: #fff;
 }
 
 @mixin blur-border {
@@ -14,12 +17,7 @@ $prefix-cls: 'wa-input';
 }
 
 @mixin active-label {
-  background: transparent;
-  pointer-events: none;
-  cursor: default;
-  top: 0;
-  padding: 4px 5px;
-  z-index: 1;
+  transform: translateY(-50%);
 }
 
 @mixin valid-label {
@@ -32,36 +30,48 @@ $prefix-cls: 'wa-input';
     box-sizing: border-box;
     display: table;
     line-height: normal;
+    input {
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      height: 30px;
+      background: transparent;
+      color: $font-color;
+      padding: 0 16px;
+      &:focus,
+      &:focus-visible {
+        @include active-input;
+      }
+    }
   }
   &-label,
   &-border {
     position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
+    transition: all 0.2s;
+    transition-timing-function: ease-out;
   }
   &-label {
     cursor: text;
-    font-size: 12px;
+    font-size: $size;
     overflow: visible;
+    color: $label-color;
+    left: 16px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
     &-focus {
       @include active-label;
+      ~ input {
+        @include activeInput;
+      }
     }
     &-valid {
       @include valid-label;
     }
   }
   &-border {
-    transition: all 0.4s;
-    transition-timing-function: ease-out;
-    position: absolute;
     left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: block;
-    pointer-events: none;
-    width: 0;
-    height: 2px;
+    transform: translate(-50%, 0);
     z-index: -1;
     &-focus {
       @include active-border;
