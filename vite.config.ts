@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url'
 import { defineConfig } from 'vite'
 import postCssPxToRem from 'wa-postcss-pxtorem'
 import svgLoader from 'vite-svg-loader'
+import tailwindCss from 'tailwindcss'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -40,7 +41,8 @@ export default defineConfig({
           selectorBlackList: ['./to', 'html'], // to开头的不进行转换,
           exclude: '/node_modules',
           unit: 'wx'
-        })
+        }),
+        tailwindCss()
       ]
     },
     preprocessorOptions: {

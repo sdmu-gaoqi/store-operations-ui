@@ -16,6 +16,8 @@ dist-ssr
 .vscode/*
 .vitepress
 !.vscode/extensions.json
+!.vscode/setting.json
+!.vscode/tailwind.json
 .idea
 .DS_Store
 *.suo
