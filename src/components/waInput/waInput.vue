@@ -1,3 +1,5 @@
+<template>page</teemplate>
+
 <!-- <template>
   <div class="inputWrapper">
     <div class="lx-input-label" ref="label_ref" v-on:click="clickLabel">

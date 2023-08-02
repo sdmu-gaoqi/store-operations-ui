@@ -62,7 +62,7 @@ $prefix-cls: 'wa-input';
     &-focus {
       @include active-label;
       ~ input {
-        @include activeInput;
+        @include active-input;
       }
     }
     &-valid {
