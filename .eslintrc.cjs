@@ -22,7 +22,6 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       extends: ['@vue/typescript/recommended', '@vue/prettier'],
-      excludedFiles: ['node_modules', 'vite.config.ts'],
       parserOptions: {
         project: './tsconfig.json'
       },

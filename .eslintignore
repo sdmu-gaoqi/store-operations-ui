@@ -9,3 +9,4 @@ _site/
 dist/
 components/version/version.tsx
 *.d.ts
+vite.config.ts
