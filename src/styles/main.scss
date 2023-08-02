@@ -1,13 +1,9 @@
-$main-color: #5cdbd3;
+$main-color: #fc8352;
 $border-color: #eee;
 $error-color: red;
-$wain-color: yellow;
-$label-color: yellow;
+$wain-color: #f6b53d;
+$label-color: #333;
 $font-color: #111;
 $size: 12px;
 $size-md: 16px;
 $size-lg: 20px;
-
-.flex-center {
-  @apply flex items-center justify-center;
-}
