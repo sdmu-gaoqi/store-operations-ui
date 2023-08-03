@@ -1,5 +1,7 @@
 import { createRequire } from 'module'
 import { defineConfig } from 'vitepress'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import { resolve } from 'path'
 
 const require = createRequire(import.meta.url)
 const pkg = require('vitepress/package.json')
@@ -16,6 +18,26 @@ export default defineConfig({
     hostname: 'https://vitepress.dev',
     transformItems(items) {
       return items.filter((item) => !item.url.includes('migration'))
+    }
+  },
+
+  vite: {
+    plugins: [vueJsx()],
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, '../../src'),
+        hooks: resolve(__dirname, '../../src/hooks'),
+        styles: resolve(__dirname, '../../src/styles'),
+        pages: resolve(__dirname, '../../src/pages'),
+        components: resolve(__dirname, '../../src/components')
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@import "../../src/styles/main.scss";'
+        }
+      }
     }
   },
 

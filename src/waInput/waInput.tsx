@@ -1,6 +1,7 @@
 import { defineComponent, onMounted, shallowRef, toRaw } from 'vue'
 import { joinCss, sleep } from 'wa-utils'
 import './waInput.scss'
+import { NativeInputProps } from '@/utils/common'
 
 const prefixCls = `wa-input`
 
@@ -19,6 +20,7 @@ export default defineComponent({
   name: 'WaInput',
   props: inputProps,
   setup(props) {
+    console.log(NativeInputProps, 'NativeInputProps')
     const { ...restProps } = toRaw(props)
     const labelRef = shallowRef(null)
     const inputRef = shallowRef<HTMLInputElement | null>(null)
