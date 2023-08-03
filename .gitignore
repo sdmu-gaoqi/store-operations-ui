@@ -14,7 +14,7 @@ dist-ssr
 
 # Editor directories and files
 .vscode/*
-.vitepress
+cache/
 !.vscode/extensions.json
 !.vscode/setting.json
 !.vscode/tailwind.json

@@ -61,7 +61,7 @@ module.exports = {
     'import/no-unresolved': 0,
     'comma-dangle': 0,
     'no-var': 'error',
-    'no-console': [2, { allow: ['warn', 'error'] }],
+    'no-console': 'off',
     'object-shorthand': 2,
     'no-unused-vars': [
       2,

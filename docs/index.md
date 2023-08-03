@@ -1,24 +1,15 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
-  name: 'My Awesome Project'
-  text: 'A VitePress Site'
-  tagline: My great project tagline
+  name: components
+  text: Vite & Vue powered static site generator.
+  tagline: Simple, powerful, and fast. Meet the modern SSG framework you've always wanted.
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Get Started
+      link: /components/input
     - theme: alt
-      text: API Examples
-      link: /api-examples
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+      text: View on GitHub
+      link: https://github.com/sdmu-gaoqi/wa-component
 ---
