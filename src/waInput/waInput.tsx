@@ -1,7 +1,16 @@
-import { defineComponent, onMounted, shallowRef, toRaw } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  shallowRef,
+  toRefs,
+  toRef,
+  watch
+} from 'vue'
 import { joinCss, sleep } from 'wa-utils'
 import './waInput.scss'
-import { NativeInputProps } from '@/utils/common'
+// import { EyeOutlined, EyeInvisibleFilled } from '@ant-design/icons-vue'
+import EyeOpen from './eye-open.png'
+import EyeClose from './eye-close.png'
 
 const prefixCls = `wa-input`
 
@@ -13,18 +22,21 @@ const inputProps = {
   onInput: Function,
   type: String,
   value: String,
-  defaultValue: String
+  defaultValue: String,
+  'class-name': String
 }
 
 export default defineComponent({
   name: 'WaInput',
   props: inputProps,
-  setup(props) {
-    console.log(NativeInputProps, 'NativeInputProps')
-    const { ...restProps } = toRaw(props)
+  emits: ['update:value'],
+  setup(props, { slots, emit }) {
+    const { ...restProps } = toRefs(props).value
+
     const labelRef = shallowRef(null)
     const inputRef = shallowRef<HTMLInputElement | null>(null)
     const borderRef = shallowRef(null)
+    const passwordRef = shallowRef<HTMLImageElement | null>(null)
 
     const focusCss = joinCss(prefixCls, ['label-focus'])
     const activeCss = joinCss(prefixCls, ['label-active'])
@@ -78,8 +90,8 @@ export default defineComponent({
       if (props.onInput) {
         props.onInput(e)
       }
+      emit('update:value', value)
       if (!value) {
-        removeFocusClass(labelRef.value!, borderRef.value!)
         return
       }
       addFocusClass(labelRef.value!, borderRef.value!, { active: true })
@@ -104,21 +116,78 @@ export default defineComponent({
       initialClass()
     })
 
+    const label = toRef(props, 'label')
+
+    watch(label, () => {
+      initialClass()
+    })
+
     return () => {
       return (
-        <div class={joinCss(prefixCls, ['wrapper'])}>
-          <div class={joinCss(prefixCls, ['label'])} ref={labelRef}>
-            {restProps.label}
-            <div ref={borderRef} class={joinCss(prefixCls, ['border'])}></div>
+        <div>
+          <div
+            class={joinCss(
+              prefixCls,
+              [
+                'wrapper',
+                slots.prefix ? 'wrapper-prefix' : '',
+                slots.suffix ? 'wrapper-suffix' : ''
+              ].filter((item) => item)
+            )}
+          >
+            {slots.prefix && (
+              <div class={joinCss(prefixCls, ['prefix'])}>{slots.prefix()}</div>
+            )}
+            <input
+              ref={inputRef}
+              {...restProps}
+              autocomplete="off"
+              class={`${joinCss(prefixCls, ['input'])}`}
+              onBlur={blur}
+              onFocus={focus}
+              onInput={_input}
+              placeholder={''}
+            ></input>
+            <div
+              class={joinCss(prefixCls, ['label'])}
+              ref={labelRef}
+              onClick={() => {
+                addFocusClass(labelRef.value!, borderRef.value!, {
+                  active: true
+                })
+                inputRef.value?.focus()
+              }}
+            >
+              {label.value}
+              <div ref={borderRef} class={joinCss(prefixCls, ['border'])}></div>
+            </div>
+            {/* @ts-ignore */}
+            {(slots.suffix || restProps.type === 'password') && (
+              <div class={joinCss(prefixCls, ['suffix'])}>
+                {!!slots.suffix ? (
+                  slots.suffix()
+                ) : (
+                  <img
+                    src={EyeClose}
+                    ref={passwordRef}
+                    onClick={() => {
+                      if (!inputRef.value || !passwordRef.value) {
+                        return
+                      }
+                      const type = inputRef.value?.type
+                      if (type === 'password') {
+                        inputRef.value.type = 'text'
+                        passwordRef.value.src = EyeOpen
+                      } else {
+                        inputRef.value.type = 'password'
+                        passwordRef.value.src = EyeClose
+                      }
+                    }}
+                  />
+                )}
+              </div>
+            )}
           </div>
-          <input
-            ref={inputRef}
-            {...restProps}
-            onBlur={blur}
-            onFocus={focus}
-            onInput={_input}
-            placeholder={''}
-          ></input>
         </div>
       )
     }

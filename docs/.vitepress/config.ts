@@ -113,7 +113,8 @@ function sidebarGuide() {
       collapsed: false,
       items: [
         { text: 'Input', link: '/components/input' },
-        { text: 'AddressSelect', link: '/components/addressSelect' }
+        { text: 'AddressSelect', link: '/components/addressSelect' },
+        { text: 'Login', link: '/components/login' }
       ]
     }
   ]

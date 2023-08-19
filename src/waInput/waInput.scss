@@ -18,7 +18,10 @@ $prefix-cls: 'wa-input';
 }
 
 @mixin active-label {
-  transform: translateY(-50%);
+  transform: translateY(-50%) scale(0.8);
+  color: $main-color;
+  display: flex;
+  align-items: center;
   span {
     color: $main-color;
   }
@@ -31,16 +34,19 @@ $prefix-cls: 'wa-input';
 .#{$prefix-cls} {
   &-wrapper {
     position: relative;
-    box-sizing: border-box;
     display: table;
     line-height: normal;
+    box-sizing: border-box;
+    width: 100%;
+
     input {
       border: 1px solid $border-color;
       border-radius: 4px;
-      height: 30px;
+      height: 36px;
       background: transparent;
       color: $font-color;
       padding: 0 16px;
+      width: 100%;
       &:focus,
       &:focus-visible {
         @include active-input;
@@ -74,8 +80,8 @@ $prefix-cls: 'wa-input';
     }
   }
   &-border {
-    left: 16px;
-    transform: translate(-50%, -50%);
+    left: 0;
+    transform: translate(-10px, -50%);
     z-index: -1;
     top: 50%;
     &-focus {
@@ -84,5 +90,48 @@ $prefix-cls: 'wa-input';
     &-valid {
       @include blur-border;
     }
+  }
+  &-prefix,
+  &-suffix {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    cursor: pointer;
+    svg {
+      font-size: 12px;
+    }
+    img {
+      width: 14px;
+    }
+  }
+  &-prefix {
+    left: 8px;
+  }
+  &-suffix {
+    right: 8px;
+  }
+}
+
+.#{$prefix-cls}-input:-webkit-autofill ~ .#{$prefix-cls}-label {
+  .#{$prefix-cls}-border {
+    @include active-border;
+  }
+
+  @include active-label;
+}
+
+.#{$prefix-cls}-wrapper.#{$prefix-cls}-wrapper-prefix {
+  input {
+    padding-left: 30px;
+  }
+  .#{$prefix-cls}-label {
+    left: 26px;
+  }
+}
+
+.#{$prefix-cls}-wrapper.#{$prefix-cls}-wrapper-suffix {
+  input {
+    padding-right: 30px;
   }
 }

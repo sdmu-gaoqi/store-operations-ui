@@ -1,9 +1,11 @@
-$main-color: #fc8352;
-$border-color: #eee;
+@import './twilwind.global';
+
+$main-color: #2d96e9;
+$border-color: #bbb;
 $error-color: red;
 $wain-color: #f6b53d;
-$label-color: #333;
-$font-color: #111;
+$label-color: #6a6d82;
+$font-color: #6a6d82;
 $size: 12px;
 $size-md: 16px;
 $size-lg: 20px;

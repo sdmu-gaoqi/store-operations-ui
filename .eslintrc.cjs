@@ -81,13 +81,7 @@ module.exports = {
     'vue/one-component-per-file': 'off',
     'vue/custom-event-name-casing': 'off',
     'vue/v-on-event-hyphenation': 'off',
-    'vue/max-attributes-per-line': [
-      2,
-      {
-        singleline: 20,
-        multiline: 1
-      }
-    ],
+    'vue/max-attributes-per-line': 'off',
     'vue/multi-word-component-names': 'off'
   },
   globals: {
