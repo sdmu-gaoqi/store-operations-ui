@@ -57,6 +57,7 @@
             v-show="loginType === 'userName'"
             name="agree"
             v-bind="validateInfos.agree"
+            class="mb-[0]"
           >
             <Checkbox
               :checked="formState.agree"
