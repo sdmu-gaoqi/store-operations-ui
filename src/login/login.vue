@@ -1,6 +1,6 @@
 <template>
   <div
-    class="shadow-lg bg-white flex items-start rounded-[10px] overflow-hidden w-[875px]"
+    class="shadow-lg bg-white flex items-start rounded-[10px] overflow-hidden w-[796px]"
   >
     <div class="login-banner">
       <div class="login-banner-content">

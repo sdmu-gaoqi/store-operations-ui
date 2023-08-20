@@ -1,11 +1,4 @@
-import {
-  defineComponent,
-  onMounted,
-  shallowRef,
-  toRefs,
-  toRef,
-  watch
-} from 'vue'
+import { defineComponent, onMounted, toRefs, toRef, watch, ref } from 'vue'
 import { joinCss, sleep } from 'wa-utils'
 import './waInput.scss'
 // import { EyeOutlined, EyeInvisibleFilled } from '@ant-design/icons-vue'
@@ -33,10 +26,10 @@ export default defineComponent({
   setup(props, { slots, emit }) {
     const { ...restProps } = toRefs(props).value
 
-    const labelRef = shallowRef(null)
-    const inputRef = shallowRef<HTMLInputElement | null>(null)
-    const borderRef = shallowRef(null)
-    const passwordRef = shallowRef<HTMLImageElement | null>(null)
+    const labelRef = ref(null)
+    const inputRef = ref<HTMLInputElement | null>(null)
+    const borderRef = ref(null)
+    const passwordRef = ref<HTMLImageElement | null>(null)
 
     const focusCss = joinCss(prefixCls, ['label-focus'])
     const activeCss = joinCss(prefixCls, ['label-active'])

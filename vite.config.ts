@@ -8,7 +8,6 @@ import tailwindCss from 'tailwindcss'
 
 // https://vitejs.dev/confi/g
 export default defineConfig({
-  outDir: 'es',
   plugins: [
     vue(),
     vueJsx(),
@@ -56,13 +55,15 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'store-operations-ui',
       fileName: (format) => `store-operations-ui.${format}.js`
-    }
-  },
-  rollupOptions: {
-    lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'store-operations-ui',
-      fileName: (format) => `store-operations-ui.${format}.js`
-    }
+    },
+    rollupOptions: {
+      external: ['vue'],
+      output: {
+        globals: {
+          vue: 'Vue'
+        }
+      }
+    },
+    cssCodeSplit: true
   }
 })
