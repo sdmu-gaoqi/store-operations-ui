@@ -1,8 +1,7 @@
 {
-  "name": "wa-component",
+  "name": "store-operations-ui",
   "description": "vue 组件库",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "vitepress dev docs",
