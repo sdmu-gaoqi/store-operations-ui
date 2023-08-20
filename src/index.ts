@@ -1,4 +1,5 @@
 export { default as Input } from './waInput/waInput'
 export { default as Test } from './test/test'
 export { default as Login } from './login/login.vue'
+export { default as TableRender } from './tableRender/tableRender.vue'
 import 'ant-design-vue/dist/reset.css'

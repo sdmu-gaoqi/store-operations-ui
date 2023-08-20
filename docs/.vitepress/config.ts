@@ -114,7 +114,8 @@ function sidebarGuide() {
       items: [
         { text: 'Input', link: '/components/input' },
         { text: 'AddressSelect', link: '/components/addressSelect' },
-        { text: 'Login', link: '/components/login' }
+        { text: 'Login', link: '/components/login' },
+        { text: 'TableRender', link: '/components/tableRender' }
       ]
     }
   ]
