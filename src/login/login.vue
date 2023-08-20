@@ -1,6 +1,6 @@
 <template>
   <div
-    class="shadow-lg bg-white flex items-start rounded-[10px] overflow-hidden"
+    class="shadow-lg bg-white flex items-start rounded-[10px] overflow-hidden w-[875px]"
   >
     <div class="login-banner">
       <div class="login-banner-content">
@@ -207,8 +207,14 @@ watch([formState.agree, formState.password], () => {
   .login-banner-content {
     @apply text-white h-[100%] w-[100%] text-center text-[20px];
   }
+  * {
+    box-sizing: border-box;
+  }
 }
 .login-content {
-  @apply w-[400px] min-h-[538px] py-[50px] px-[40px];
+  @apply w-[400px] min-h-[538px] py-[50px] px-[40px] box-border;
+  * {
+    box-sizing: border-box;
+  }
 }
 </style>

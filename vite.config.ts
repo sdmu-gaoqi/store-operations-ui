@@ -59,7 +59,6 @@ export default defineConfig({
     }
   },
   rollupOptions: {
-    external: ['vue'],
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'store-operations-ui',
