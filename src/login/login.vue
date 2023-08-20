@@ -96,7 +96,8 @@ import { Checkbox, Button, Form } from 'ant-design-vue'
 import { useInterval } from '@vueuse/core'
 
 const props = defineProps({
-  onFinish: Function
+  onFinish: Function,
+  getCode: Function
 })
 
 interface FormState {
@@ -168,7 +169,16 @@ const { counter, reset, pause, resume } = intervalData
 pause()
 
 const getCode = () => {
-  resume()
+  validate(['account']).then(() => {
+    if (props.getCode) {
+      props
+        .getCode(formState)
+        .then(() => {
+          resume()
+        })
+        .catch(() => {})
+    }
+  })
 }
 
 watch(counter, () => {
