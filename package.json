@@ -1,9 +1,12 @@
 {
   "name": "store-operations-ui",
   "description": "vue 组件库",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "main": "dist/store-operations-ui.es.js",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vue-tsc && vite build",
