@@ -2,7 +2,7 @@
 
 ## LoginDemo
 
-<Login />
+<Login :onFinish="onFinish"/>
 
 ::: details
 
@@ -24,4 +24,6 @@ export default defineComponent({
 
 <script lang="ts" setup>
 import { Login } from '../../src/index'
+
+const onFinish = (v) => {console.log(v)}
 </script>

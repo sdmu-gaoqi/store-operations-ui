@@ -95,6 +95,10 @@ import type { LoginType } from './typing'
 import { Checkbox, Button, Form } from 'ant-design-vue'
 import { useInterval } from '@vueuse/core'
 
+const props = defineProps({
+  onFinish: Function
+})
+
 interface FormState {
   account: string
   password: string
@@ -181,12 +185,19 @@ const changeLoginTye = () => {
 
 const onFinish = () => {
   validate(['account', 'password']).then((value) => {
-    console.log(value, 'vvvvvv')
+    if (props.onFinish) {
+      props.onFinish(value)
+    }
   })
 }
 
 const isAccount = computed(() => {
   return loginType.value === 'userName'
+})
+
+watch([formState.agree, formState.password], () => {
+  if (formState.agree) {
+  }
 })
 </script>
 
