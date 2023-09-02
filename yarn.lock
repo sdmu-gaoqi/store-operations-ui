@@ -6765,10 +6765,10 @@ wa-postcss-pxtorem@^0.0.1:
   resolved "https://registry.npmmirror.com/wa-postcss-pxtorem/-/wa-postcss-pxtorem-0.0.1.tgz#160638b1020e8b05512db0fdb16d2be4d186aa97"
   integrity sha512-5rJSP49FwwF2rS5TXyHIpxiZ4ZWZIyyNfYombxOPXIWFR1TuLBM3/x+zTto1Kzk0nNZCKEYgjS8bpcEn8If8WQ==
 
-wa-utils@0.1.4:
-  version "0.1.4"
-  resolved "https://registry.npmjs.org/wa-utils/-/wa-utils-0.1.4.tgz#2e646ca66ffec9a0c1d718db308f3e9ce735bce1"
-  integrity sha512-U7mXOogXHs5HFDiEd4zFxDrgZx668D9rdP/SdTLAT44UorNDi1Wl58PHq158KbxDpeehc9PF2F474Ijncb36nA==
+wa-utils@0.1.6:
+  version "0.1.6"
+  resolved "https://registry.npmjs.org/wa-utils/-/wa-utils-0.1.6.tgz#c33009a6f249aaaa1560b9dc934e7d5b98513f17"
+  integrity sha512-K+qvhhgwDbh0VoERDs92vsnAvpRXPgyv0+jCJeDaVPxyeu7BXhHpYsvyJq0U8ggdN96e7/ZfZlxUMT5O/BnGyw==
   dependencies:
     "@types/js-cookie" "^3.0.3"
     "@types/uuid" "^9.0.2"

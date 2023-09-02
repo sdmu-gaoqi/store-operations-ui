@@ -3,6 +3,7 @@
 ## TableRender Demo
 
 <TableRender :schema="schema">
+<template v-slot:formButton><div>自定义按钮</div></template>
 </TableRender>
 
 ::: details

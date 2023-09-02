@@ -2,17 +2,20 @@
   <ConfigProvider
     :theme="{
       token: {
-        colorPrimary: '#585eaa'
+        colorPrimary: '#585eaa',
+        colorTextBase: '#6a6d82',
+        colorBgBase: '#fff',
+        borderRadius: 20
       }
     }"
   >
     <Card :title="realSchema?.title" :class="joinCss('soui', ['tabs'])">
-      <FormRender
+      <TableFormRender
         :options="schema && schema.options"
         :form="schema && schema.form"
       >
         <template #formButton><slot.formButton></slot.formButton></template
-      ></FormRender>
+      ></TableFormRender>
       <Tabs
         v-model:activeKey="activeKey"
         type="card"
@@ -58,7 +61,7 @@ import {
 import { Card, Tabs, TabPane, Table, ConfigProvider } from 'ant-design-vue'
 import { joinCss } from 'wa-utils'
 import { formatColumns } from './utils'
-import FormRender from '../formRender/formRender.vue'
+import TableFormRender from '../tableFormRender/tableFormRender.vue'
 
 const slot = defineSlots()
 

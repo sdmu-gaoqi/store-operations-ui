@@ -1,199 +1,299 @@
 <template>
-  <Form class="opui-form" ref="formRef" :model="formState">
-    <Row>
-      <Col
-        v-for="i in fields"
-        :key="i.key"
-        :class="colClass + ' ' + (i.class || '')"
-      >
-        <Form.Item :label="i.label" :name="i.key" class="pl-[20px]">
-          <Input
-            v-if="i.type === 'search'"
-            :placeholder="i.placeholder || i.label"
-            v-model:value="formState[i.key]"
-            class="w-[100%]"
-          ></Input>
-          <DatePicker
-            v-if="i.type === 'date'"
-            :show-time="i.format === 'dateTime'"
-            :placeholder="i.placeholder || i.label"
-            v-model:value="formState[i.key]"
-            class="w-[100%]"
-            :picker="
-              ['week', 'month', 'quarter', 'year'].includes(i.format)
-                ? i.format
-                : undefined
-            "
-          ></DatePicker>
-          <DatePicker.RangePicker
-            v-if="i.type === 'range'"
-            :placeholder="i.placeholder || i.label"
-            :show-time="i.format === 'dateTime'"
-            v-model:value="formState[i.key]"
-            class="w-[100%]"
-            :picker="
-              ['week', 'month', 'quarter', 'year'].includes(i.format)
-                ? i.format
-                : undefined
-            "
-          ></DatePicker.RangePicker>
-          <Select
-            v-if="i.type === 'select'"
-            :placeholder="i.placeholder || i.label"
-            :options="getOptions(i.key)"
-            v-model:value="formState[i.key]"
-            class="w-[100%]"
-            show-search
-          ></Select>
-        </Form.Item>
-      </Col>
-      <div class="pl-[110px]">
-        <Button
-          v-if="form && form.search"
-          class="opui-form-button bg-primary"
-          type="primary"
-          v-on:click="onFinish"
-          >查询</Button
-        >
-        <Button
-          v-if="form && form.reset"
-          class="opui-form-button"
-          v-on:click="onReset"
-          >重置</Button
-        >
-        <Button
-          v-if="form && form.export"
-          class="opui-form-button bg-primary"
-          type="primary"
-          v-on:click="onExport"
-          >导出</Button
-        >
-        <slot name="formButton"></slot>
+  <Form
+    class="op-ui-form-render"
+    :model="formState"
+    autocomplete="off"
+    name="basic"
+    ref="formRef"
+    :rules="schema.rules"
+  >
+    <div class="op-ui-form-render-body">
+      <div class="wa-form-render">
+        <Row class="w-[100%]">
+          <template v-if="schema" v-for="[key, item] in schemaProperties">
+            <Col :span="24 / column">
+              <Form.Item
+                :class="joinCss('wa-form-render', ['row'])"
+                :extra="item.extra || ''"
+                :name="key"
+              >
+                <template #label>
+                  <span>{{ item.title || '' }}</span>
+                  <a-tooltip v-if="item.tooltip" :title="item.tooltip.title">
+                    <QuestionCircleOutlined class="ml-[5px]" />
+                  </a-tooltip>
+                </template>
+                <Input
+                  :style="item?.props?.style || {}"
+                  v-if="item.type === 'string' && item.widget === 'input'"
+                  :placeholder="item?.props?.placeholder || ''"
+                  v-model:value="formState[key]"
+                  :maxlength="item?.props?.maxLength || undefined"
+                  :type="item?.props?.type ?? 'text'"
+                />
+                <InputNumber
+                  :style="item?.props?.style || { width: '100%' }"
+                  v-if="item.type === 'number' && item.widget === 'input'"
+                  :placeholder="item?.props?.placeholder || ''"
+                  v-model:value="formState[key]"
+                  :maxlength="item?.props?.maxLength || undefined"
+                  :type="item?.props?.type ?? 'text'"
+                  :max="item?.props?.max || undefined"
+                ></InputNumber>
+                <Select
+                  :placeholder="item?.props?.placeholder || ''"
+                  :options="item?.props?.options || []"
+                  :style="item?.props?.style || {}"
+                  v-if="['select'].includes(item?.widget || '')"
+                  v-model:value="formState[key]"
+                ></Select>
+                <Select
+                  :placeholder="item?.props?.placeholder || ''"
+                  :options="item?.props?.options || []"
+                  mode="multiple"
+                  :style="item?.props?.style || {}"
+                  v-if="['multiSelect'].includes(item?.widget || '')"
+                  v-model:value="formState[key]"
+                ></Select>
+                <Input.TextArea
+                  v-if="item.widget === 'textArea'"
+                  :placeholder="item?.props?.placeholder || ''"
+                  v-model:value="formState[key]"
+                  :style="item?.props?.style || {}"
+                ></Input.TextArea>
+                <RadioGroup
+                  v-if="item.widget === 'radio'"
+                  v-model:value="formState[key]"
+                >
+                  <Radio
+                    :value="radioItem?.value"
+                    :style="item?.props?.style || {}"
+                    v-for="radioItem in item.props?.options"
+                    >{{ radioItem?.label }}</Radio
+                  ></RadioGroup
+                >
+                <DatePicker
+                  v-if="
+                    ['datePicker', 'timePicker'].includes(item.widget || '') &&
+                    item.type === 'string'
+                  "
+                  :placeholder="item?.props?.placeholder || ''"
+                  :showTime="item?.props?.showTime"
+                  :style="item?.props?.style || { width: '50%' }"
+                  v-model:value="formState[key]"
+                  :format="
+                    getFormat(
+                      item?.picker || item?.format,
+                      item.props?.showTime,
+                      item.props?.showSecond ?? true
+                    )
+                  "
+                  :value-format="
+                    getFormat(
+                      item?.picker || item?.format,
+                      item.props?.showTime,
+                      item.props?.showSecond ?? true
+                    )
+                  "
+                  :picker="item?.picker || item?.format || 'date'"
+                  :showNow="item?.props?.showNow || false"
+                ></DatePicker>
+                <RangePicker
+                  v-if="
+                    ['dateRange', 'timeRange'].includes(item.widget || '') &&
+                    item.type === 'range'
+                  "
+                  :style="item?.props?.style || { width: '50%' }"
+                  :placeholder="
+                    item?.props?.placeholder || ['开始时间', '结束时间']
+                  "
+                  :showTime="item?.props?.showTime"
+                  v-model:value="formState[key]"
+                  :picker="item?.picker || item?.format || 'date'"
+                  :showNow="item?.props?.showNow"
+                  :format="
+                    getFormat(
+                      item?.picker || item?.format,
+                      item.props?.showTime,
+                      item.props?.showSecond ?? true
+                    )
+                  "
+                  :value-format="
+                    getFormat(
+                      item.props?.picker || item.props?.format,
+                      item.props?.showTime,
+                      item.props?.showSecond ?? true
+                    )
+                  "
+                ></RangePicker>
+                <Switch
+                  v-if="item.widget === 'switch'"
+                  :placeholder="item?.props?.placeholder || ''"
+                  v-model:checked="formState[key]"
+                  :style="item?.props?.style || {}"
+                >
+                </Switch>
+                <CheckboxGroup
+                  :placeholder="item?.props?.placeholder || ''"
+                  :options="item.props?.options"
+                  v-if="item?.widget === 'checkboxes'"
+                  v-model:value="formState[key]"
+                  :style="item?.props?.style || {}"
+                ></CheckboxGroup>
+                <Rate
+                  v-if="item.widget === 'rate'"
+                  :count="item.props?.count || 5"
+                  :allowClear="item.props?.allowClear || true"
+                  :allowHalf="item.props?.allowHalf || false"
+                  v-model:value="formState[key]"
+                  :style="item?.props?.style || {}"
+                ></Rate>
+              </Form.Item>
+            </Col>
+          </template>
+        </Row>
       </div>
-    </Row>
+    </div>
+    <div
+      class="wa-form-footer flex-shrink-0 h-[60px] flex justify-end items-center px-[50px] bg-[#f5f5f5] bottom-0"
+    >
+      <Button
+        v-if="footerOptions?.cancel"
+        :ghost="true"
+        type="primary"
+        class="ml-[20px] w-[120px]"
+        @click="cancel"
+        >取消</Button
+      >
+      <Button
+        v-if="footerOptions?.reset"
+        :ghost="true"
+        type="primary"
+        class="ml-[20px] w-[120px]"
+        @click="resetForm"
+        >重置</Button
+      >
+      <Button
+        v-if="footerOptions?.submit"
+        class="ml-[20px] w-[120px]"
+        type="primary"
+        @click="onSubmit"
+        >提交</Button
+      >
+    </div>
   </Form>
 </template>
 
 <script lang="ts" setup>
-import { toRef, toRefs, ref, reactive } from 'vue'
+import { computed, ref, toRaw, toRef } from 'vue'
+import { joinCss } from 'wa-utils'
 import {
-  Button,
-  Col,
-  DatePicker,
   Form,
   Input,
+  Select,
   Row,
-  Select
+  Col,
+  InputNumber,
+  Radio,
+  DatePicker,
+  RangePicker,
+  Button,
+  Switch,
+  CheckboxGroup,
+  RadioGroup,
+  Rate
 } from 'ant-design-vue'
+import { FormRenderProps } from './type'
+import { QuestionCircleOutlined } from '@ant-design/icons-vue'
 
-const colClass = 'w-[300px]'
-
+const props = defineProps<FormRenderProps>()
+const schema = toRef(props, 'schema')
+const column = computed(() => {
+  const formColumn = +(schema?.value?.column || 1)
+  return formColumn
+})
+const formState = ref<Record<string, any>>({})
 const formRef = ref()
-
-const slot = defineSlots()
-
-console.log(slot, 'slot')
-
-const props = defineProps({
-  form: Object,
-  options: Object,
-  submit: Function,
-  handleExport: Function
+const schemaProperties = Object.entries(schema?.value?.properties || {})
+schemaProperties.forEach(([key, value]) => {
+  formState.value[key] = value?.defaultValue || undefined
+})
+const footerOptions = computed(() => {
+  return {
+    submit: schema?.value?.footer?.submit ?? true,
+    reset: schema?.value?.footer?.reset ?? false,
+    cancel: schema?.value?.footer?.cancel ?? true
+  }
 })
 
-interface FormState {
-  [key: string]: any
-}
-
-let formState = reactive<FormState>({})
-
-const { form, options } = toRefs(props)
-const { submit, handleExport } = props
-
-const fields = toRef(form!.value!.fields)
-
-const getOptions = (key: string) => {
-  if (!options?.value) {
-    return []
-  } else if (options.value) {
-    const target = options?.value?.[key]
-    if (target) {
-      return target
-    }
-    return []
+const getFormat = (
+  type: 'date' | 'week' | 'month' | 'quarter' | 'year' | string,
+  showTime: boolean,
+  showSecond?: boolean
+) => {
+  switch (type) {
+    case 'date':
+      return showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+    case 'week':
+      return 'YYYY第W周'
+    case 'month':
+      return 'YYYY-MM'
+    case 'quarter':
+      return 'YYYY年Q季度'
+    case 'year':
+      return 'YYYY'
+    case 'time':
+      return showSecond ? 'HH:mm:ss' : 'HH:mm'
+    default:
+      return showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
   }
 }
-
-const getFormValue = async () => {
-  const value: Record<string, any> = {}
-  const res = await formRef.value.validate()
-  for (let k in res) {
-    const target = fields.value.find((item: any) => item.key === k)
-    if (target && target.type) {
-      if (target.type === 'date') {
-        let dateFormat = 'YYYY-MM-DD'
-        if (target.format === 'month') {
-          dateFormat = 'YYYY-MM'
-        } else if (target.format === 'year') {
-          dateFormat = 'YYYY'
-        } else if (target.format === 'dateTime') {
-          dateFormat = 'YYYY-MM-DD HH:mm:ss'
-        }
-        value[k] = res[k].format(dateFormat)
-      } else if (target.type === 'range') {
-        let dateFormat = 'YYYY-MM-DD'
-        if (target.format === 'month') {
-          dateFormat === 'YYYY-MM'
-        } else if (target.format === 'year') {
-          dateFormat = 'YYYY'
-        } else if (target.format === 'dateTime') {
-          dateFormat = 'YYYY-MM-DD HH:mm:ss'
-        }
-        ;(value[k] = res[k]).map((v: any) => v.format(dateFormat))
-      } else {
-        value[k] = res[k]
+const onSubmit = () => {
+  formRef.value
+    .validate()
+    .then(() => {
+      if (props.onFinish) {
+        props.onFinish(toRaw(formState.value))
       }
-    } else {
-      value[k] = res[k]
-    }
-  }
-  return value
+    })
+    .catch((error: any) => {
+      console.log(error)
+      formRef.value.scrollToField('code')
+    })
 }
-
-const onFinish = async () => {
-  const value = await getFormValue()
-  if (submit) {
-    submit(value)
-  }
-}
-
-const onReset = () => {
-  console.log('aaaaaa')
+const resetForm = () => {
   formRef.value.resetFields()
-  if (submit) {
-    submit({})
-  }
 }
-
-const onExport = async () => {
-  const value = await getFormValue()
-  if (handleExport) {
-    handleExport(value)
+const cancel = () => {
+  if (props.onCancel) {
+    props.onCancel()
   }
 }
 </script>
 
 <style lang="scss">
-.opui-form {
-  margin-bottom: 20px;
-  .ant-form-item-label {
-    width: 90px;
+.op-ui-form-render {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  &-body {
+    overflow: hidden auto;
+    padding-top: 20px;
   }
 }
-.opui-form-button {
-  margin-left: 10px;
-  &:first-child {
-    margin-left: 0;
+.wa-form-render {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 26px;
+  &-row {
+    margin-bottom: 30px;
+    padding: 0 10px;
+  }
+  .ant-form-item-label {
+    width: 120px;
+    padding-right: 20px;
   }
 }
 </style>
