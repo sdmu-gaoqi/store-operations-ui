@@ -1,88 +1,90 @@
 <template>
-  <div
-    class="shadow-lg bg-white flex items-start rounded-[10px] overflow-hidden w-[796px]"
-  >
-    <div class="login-banner">
-      <div class="login-banner-content">
-        <div class="mb-[50px]">门店管理系统</div>
-        <div class="text-[14px]">版本号：V1.0.0</div>
+  <ThemeProvider>
+    <div
+      class="shadow-lg bg-white flex items-start rounded-[10px] overflow-hidden w-[796px]"
+    >
+      <div class="login-banner">
+        <div class="login-banner-content">
+          <div class="mb-[50px]">门店管理系统</div>
+          <div class="text-[14px]">版本号：V1.0.0</div>
+        </div>
       </div>
-    </div>
 
-    <div class="login-content">
-      <div class="login-title mb-[50px] flex items-center">
-        {{ configs.title }}
+      <div class="login-content">
+        <div class="login-title mb-[50px] flex items-center">
+          {{ configs.title }}
 
-        <span
-          class="text-primary text-[12px] cursor-pointer ml-auto select-none"
-          @click="changeLoginTye"
-          >{{ configs.checkText }}</span
-        >
-      </div>
-      <Form autocomplete="off" name="login">
-        <Form.Item class="mb-[40px]" v-bind="validateInfos.account">
-          <Input
-            :label="configs.namePlaceholder"
-            class="login-input"
-            v-model:value="formState.account"
+          <span
+            class="text-primary text-[12px] cursor-pointer ml-auto select-none"
+            @click="changeLoginTye"
+            >{{ configs.checkText }}</span
           >
-            <template #prefix> <user-outlined /> </template>
-            ></Input
-          >
-        </Form.Item>
-        <Form.Item v-bind="validateInfos.password">
-          <Input
-            :label="configs.passwordPlaceholder"
-            class="login-input"
-            type="password"
-            v-model:value="formState.password"
-          >
-            <template #prefix> <user-outlined /> </template>
-            <template #suffix v-if="!isAccount">
-              <span
-                class="cursor-pointer text-primary text-[12px]"
-                @click="getCode"
-                >{{
-                  counter < count && counter > 0
-                    ? count - counter
-                    : '获取验证码'
-                }}</span
-              >
-            </template>
+        </div>
+        <Form autocomplete="off" name="login">
+          <Form.Item class="mb-[40px]" v-bind="validateInfos.account">
+            <Input
+              :label="configs.namePlaceholder"
+              class="login-input"
+              v-model:value="formState.account"
             >
-          </Input></Form.Item
-        >
-        <div class="flex justify-between items-center h-[100px]">
-          <Form.Item
-            v-show="loginType === 'userName'"
-            name="agree"
-            v-bind="validateInfos.agree"
-            class="mb-[0]"
-          >
-            <Checkbox
-              :checked="formState.agree"
-              @change="(v) => (formState.agree = v.target.checked)"
-              >记住密码</Checkbox
+              <template #prefix> <user-outlined /> </template>
+              ></Input
             >
           </Form.Item>
-          <div
-            v-show="loginType === 'userName'"
-            class="text-primary text-[12px] cursor-pointer"
+          <Form.Item v-bind="validateInfos.password">
+            <Input
+              :label="configs.passwordPlaceholder"
+              class="login-input"
+              type="password"
+              v-model:value="formState.password"
+            >
+              <template #prefix> <user-outlined /> </template>
+              <template #suffix v-if="!isAccount">
+                <span
+                  class="cursor-pointer text-primary text-[12px]"
+                  @click="getCode"
+                  >{{
+                    counter < count && counter > 0
+                      ? count - counter
+                      : '获取验证码'
+                  }}</span
+                >
+              </template>
+              >
+            </Input></Form.Item
           >
-            忘记密码?
+          <div class="flex justify-between items-center h-[100px]">
+            <Form.Item
+              v-show="loginType === 'userName'"
+              name="agree"
+              v-bind="validateInfos.agree"
+              class="mb-[0]"
+            >
+              <Checkbox
+                :checked="formState.agree"
+                @change="(v) => (formState.agree = v.target.checked)"
+                >记住密码</Checkbox
+              >
+            </Form.Item>
+            <div
+              v-show="loginType === 'userName'"
+              class="text-primary text-[12px] cursor-pointer"
+            >
+              忘记密码?
+            </div>
           </div>
-        </div>
-        <Form.Item>
-          <Button
-            type="primary"
-            class="w-[100%] h-[40px] mt-[20px]"
-            @click.prevent="onFinish"
-            >登录</Button
-          ></Form.Item
-        >
-      </Form>
+          <Form.Item>
+            <Button
+              type="primary"
+              class="w-[100%] h-[40px] mt-[20px]"
+              @click.prevent="onFinish"
+              >登录</Button
+            ></Form.Item
+          >
+        </Form>
+      </div>
     </div>
-  </div>
+  </ThemeProvider>
 </template>
 
 <script setup lang="ts">
@@ -94,6 +96,7 @@ import type { LoginType } from './typing'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import { Checkbox, Button, Form } from 'ant-design-vue'
 import { useInterval } from '@vueuse/core'
+import ThemeProvider from '../themeProvider/themeProvider.vue'
 
 const props = defineProps({
   onFinish: Function,
