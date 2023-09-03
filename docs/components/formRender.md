@@ -296,7 +296,8 @@ const editSchema = {
   column: 2,
   maxWidth: '340px',
   footer: {
-    reset: true
+    reset: true,
+    cancel: '返回'
   }
 }
 

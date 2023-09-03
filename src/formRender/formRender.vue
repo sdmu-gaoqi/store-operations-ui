@@ -1,14 +1,5 @@
 <template>
-  <ConfigProvider
-    :theme="{
-      token: {
-        colorPrimary: '#585eaa',
-        colorTextBase: '#6a6d82',
-        colorBgBase: '#fff',
-        borderRadius: 20
-      }
-    }"
-  >
+  <ThemeProvider>
     <Form
       class="op-ui-form-render"
       :model="formState"
@@ -18,10 +9,13 @@
       :rules="schema.rules"
     >
       <div class="op-ui-form-render-body">
-        <div class="wa-form-render">
+        <div
+          class="wa-form-render"
+          :style="{ width: props.schema.width || 'auto', margin: 'auto' }"
+        >
           <Row class="w-[100%]">
             <template v-if="schema" v-for="[key, item] in schemaProperties">
-              <Col :span="24 / column">
+              <Col v-if="!key.startsWith('op-group')" :span="24 / column">
                 <Form.Item
                   :class="joinCss('wa-form-render', ['row'])"
                   :extra="item.extra || ''"
@@ -29,9 +23,9 @@
                 >
                   <template #label>
                     <span>{{ item.title || '' }}</span>
-                    <a-tooltip v-if="item.tooltip" :title="item.tooltip.title">
+                    <Tooltip v-if="item.tooltip" :title="item.tooltip.title">
                       <QuestionCircleOutlined class="ml-[5px]" />
-                    </a-tooltip>
+                    </Tooltip>
                   </template>
                   <Input
                     :style="item?.props?.style || {}"
@@ -40,7 +34,14 @@
                     v-model:value="formState[key]"
                     :maxlength="item?.props?.maxLength || undefined"
                     :type="item?.props?.type ?? 'text'"
-                  />
+                    :disabled="item.props?.disabled"
+                    :readonly="item.props?.readonly ?? false"
+                    :bordered="item.props?.bordered ?? true"
+                  >
+                    <template v-if="item.props?.suffix" #suffix>
+                      <span>{{ renderSuffix(item.props?.suffix) }}</span>
+                    </template></Input
+                  >
                   <InputNumber
                     :style="item?.props?.style || { width: '100%' }"
                     v-if="item.type === 'number' && item.widget === 'input'"
@@ -49,13 +50,21 @@
                     :maxlength="item?.props?.maxLength || undefined"
                     :type="item?.props?.type ?? 'text'"
                     :max="item?.props?.max || undefined"
-                  ></InputNumber>
+                    :disabled="item.props?.disabled"
+                  >
+                    <template v-if="item.props?.suffix" #addonAfter>
+                      <span>{{ renderSuffix(item.props?.suffix) }}</span>
+                    </template></InputNumber
+                  >
                   <Select
                     :placeholder="item?.props?.placeholder || ''"
                     :options="item?.props?.options || []"
                     :style="item?.props?.style || {}"
                     v-if="['select'].includes(item?.widget || '')"
                     v-model:value="formState[key]"
+                    :disabled="item.props?.disabled"
+                    :allow-clear="true"
+                    :show-search="true"
                   ></Select>
                   <Select
                     :placeholder="item?.props?.placeholder || ''"
@@ -64,12 +73,16 @@
                     :style="item?.props?.style || {}"
                     v-if="['multiSelect'].includes(item?.widget || '')"
                     v-model:value="formState[key]"
+                    :disabled="item.props?.disabled"
+                    :allow-clear="true"
+                    :show-search="true"
                   ></Select>
                   <Input.TextArea
                     v-if="item.widget === 'textArea'"
                     :placeholder="item?.props?.placeholder || ''"
                     v-model:value="formState[key]"
                     :style="item?.props?.style || {}"
+                    :disabled="item.props?.disabled"
                   ></Input.TextArea>
                   <RadioGroup
                     v-if="item.widget === 'radio'"
@@ -79,6 +92,7 @@
                       :value="radioItem?.value"
                       :style="item?.props?.style || {}"
                       v-for="radioItem in item.props?.options"
+                      :disabled="item.props?.disabled"
                       >{{ radioItem?.label }}</Radio
                     ></RadioGroup
                   >
@@ -92,6 +106,7 @@
                     :showTime="item?.props?.showTime"
                     :style="item?.props?.style || { width: '50%' }"
                     v-model:value="formState[key]"
+                    :disabled="item.props?.disabled"
                     :format="
                       getFormat(
                         item?.picker || item?.format,
@@ -122,6 +137,7 @@
                     v-model:value="formState[key]"
                     :picker="item?.picker || item?.format || 'date'"
                     :showNow="item?.props?.showNow"
+                    :disabled="item.props?.disabled"
                     :format="
                       getFormat(
                         item?.picker || item?.format,
@@ -142,6 +158,7 @@
                     :placeholder="item?.props?.placeholder || ''"
                     v-model:checked="formState[key]"
                     :style="item?.props?.style || {}"
+                    :disabled="item.props?.disabled"
                   >
                   </Switch>
                   <CheckboxGroup
@@ -150,6 +167,7 @@
                     v-if="item?.widget === 'checkboxes'"
                     v-model:value="formState[key]"
                     :style="item?.props?.style || {}"
+                    :disabled="item.props?.disabled"
                   ></CheckboxGroup>
                   <Rate
                     v-if="item.widget === 'rate'"
@@ -158,15 +176,24 @@
                     :allowHalf="item.props?.allowHalf || false"
                     v-model:value="formState[key]"
                     :style="item?.props?.style || {}"
+                    :disabled="item.props?.disabled"
                   ></Rate>
                 </Form.Item>
+              </Col>
+              <Col :span="24" v-if="key.startsWith('op-group')">
+                <div class="flex items-center text-[16px] pb-[16px]">
+                  <Classify
+                    class="fill-primary w-[16px] h-[16px] mr-[10px]"
+                  ></Classify>
+                  {{ item.title }}
+                </div>
               </Col>
             </template>
           </Row>
         </div>
       </div>
       <div
-        class="wa-form-footer flex-shrink-0 h-[60px] flex justify-end items-center px-[50px] bg-[#f5f5f5] bottom-0"
+        class="wa-form-footer flex-shrink-0 h-[60px] flex justify-end items-center px-[50px] bg-[#f5f5f5] bottom-0 w-[100%]"
       >
         <Button
           v-if="footerOptions?.cancel"
@@ -174,7 +201,12 @@
           type="primary"
           class="ml-[20px] w-[120px]"
           @click="cancel"
-          >取消</Button
+        >
+          {{
+            typeof footerOptions?.cancel === 'string'
+              ? footerOptions.cancel
+              : '取消'
+          }}</Button
         >
         <Button
           v-if="footerOptions?.reset"
@@ -182,18 +214,28 @@
           type="primary"
           class="ml-[20px] w-[120px]"
           @click="resetForm"
-          >重置</Button
+        >
+          {{
+            typeof footerOptions?.reset === 'string'
+              ? footerOptions.reset
+              : '重置'
+          }}</Button
         >
         <Button
           v-if="footerOptions?.submit"
           class="ml-[20px] w-[120px]"
           type="primary"
           @click="onSubmit"
-          >提交</Button
         >
+          {{
+            typeof footerOptions?.submit === 'string'
+              ? footerOptions.submit
+              : '提交'
+          }}
+        </Button>
       </div>
     </Form>
-  </ConfigProvider>
+  </ThemeProvider>
 </template>
 
 <script lang="ts" setup>
@@ -214,10 +256,13 @@ import {
   CheckboxGroup,
   RadioGroup,
   Rate,
-  ConfigProvider
+  Tooltip
 } from 'ant-design-vue'
+import ThemeProvider from '../themeProvider/themeProvider.vue'
 import { FormRenderProps } from './type'
 import { QuestionCircleOutlined } from '@ant-design/icons-vue'
+import { renderSuffix } from './utils'
+import Classify from '@/assets/classify.svg'
 
 const props = defineProps<FormRenderProps>()
 const schema = toRef(props, 'schema')
@@ -290,9 +335,12 @@ const cancel = () => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   &-body {
     overflow: hidden auto;
     padding-top: 20px;
+    flex: 1;
   }
 }
 .wa-form-render {

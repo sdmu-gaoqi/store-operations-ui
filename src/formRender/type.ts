@@ -69,9 +69,9 @@ export interface SchemaBase {
   validateTrigger?: string | string[]
   [key: string]: any
   footer: {
-    submit?: boolean
-    reset?: boolean
-    cancel?: boolean
+    submit?: boolean | string
+    reset?: boolean | string
+    cancel?: boolean | string
   }
 }
 export type Schema = Partial<SchemaBase>

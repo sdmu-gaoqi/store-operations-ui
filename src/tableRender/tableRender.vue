@@ -1,14 +1,5 @@
 <template>
-  <ConfigProvider
-    :theme="{
-      token: {
-        colorPrimary: '#585eaa',
-        colorTextBase: '#6a6d82',
-        colorBgBase: '#fff',
-        borderRadius: 20
-      }
-    }"
-  >
+  <ThemeProvider>
     <Card :title="realSchema?.title" :class="joinCss('soui', ['tabs'])">
       <TableFormRender
         :options="schema && schema.options"
@@ -45,11 +36,11 @@
         :dataSource="dataSource"
         :bordered="true"
       >
-        <template #title><slot.title /></template>
-        <template #footer><slot.footer /></template>
+        <template #title v-if="slot.title"><slot.title /></template>
+        <template #footer v-if="slot.footer"><slot.footer /></template>
       </Table>
     </Card>
-  </ConfigProvider>
+  </ThemeProvider>
 </template>
 
 <script lang="ts" setup>
@@ -58,7 +49,8 @@ import {
   schema as defaultSchema,
   dataSource as defaultDataSource
 } from './templete'
-import { Card, Tabs, TabPane, Table, ConfigProvider } from 'ant-design-vue'
+import { Card, Tabs, TabPane, Table } from 'ant-design-vue'
+import ThemeProvider from '../themeProvider/themeProvider.vue'
 import { joinCss } from 'wa-utils'
 import { formatColumns } from './utils'
 import TableFormRender from '../tableFormRender/tableFormRender.vue'
