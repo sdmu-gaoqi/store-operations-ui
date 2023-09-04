@@ -25,6 +25,9 @@
             :bordered="true"
           >
             <slot.default v-if="slot.default"></slot.default>
+            <template #bodyCell="data" v-if="slot.bodyCell">
+              <slot.bodyCell :data="data"></slot.bodyCell>
+            </template>
             <template #title v-if="slot.title"><slot.title /></template>
             <template #footer v-if="slot.footer"><slot.footer /></template>
           </Table>
