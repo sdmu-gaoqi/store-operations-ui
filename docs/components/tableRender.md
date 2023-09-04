@@ -4,6 +4,9 @@
 
 <TableRender :schema="schema">
 <template v-slot:formButton><div>自定义按钮</div></template>
+<template #bodyCell="{data}">
+{{data.text}}
+</template>
 </TableRender>
 
 ::: details
@@ -128,7 +131,10 @@ const schema = {
           fixed: 'right',
           title: '操作',
           dataIndex: 'options',
-          options: ['detail']
+          options: ['detail'],
+          buttonGroup: [
+            { title: 'hh' }
+          ]
         }
       ]
     }

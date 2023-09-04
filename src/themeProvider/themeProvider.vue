@@ -15,5 +15,4 @@
 <script lang="ts" setup>
 import { ConfigProvider } from 'ant-design-vue'
 const solt = defineSlots()
-console.log(solt, 'solt')
 </script>

@@ -90,10 +90,6 @@ const colClass = 'w-[300px]'
 
 const formRef = ref()
 
-const slot = defineSlots()
-
-console.log(slot, 'slot')
-
 const props = defineProps({
   form: Object,
   options: Object,
