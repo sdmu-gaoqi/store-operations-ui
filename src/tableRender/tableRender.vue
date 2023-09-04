@@ -8,9 +8,10 @@
         <template #formButton><slot.formButton></slot.formButton></template
       ></TableFormRender>
       <Tabs
-        v-model:activeKey="props.activeKey"
         type="card"
         v-if="realTabs.length > 1"
+        :active-key="props.activeKey"
+        v-on:change="(key) => emit('update:activeKey', key)"
       >
         <TabPane v-for="i in realTabs" :key="i.key" :tab="i.title">
           <Table
@@ -51,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, toRaw, toRef, toRefs } from 'vue'
+import { computed, onMounted, ref, toRef, toRefs } from 'vue'
 import {
   schema as defaultSchema,
   dataSource as defaultDataSource
