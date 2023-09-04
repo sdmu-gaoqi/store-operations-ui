@@ -8,10 +8,9 @@
         <template #formButton><slot.formButton></slot.formButton></template
       ></TableFormRender>
       <Tabs
-        v-model:activeKey="activeKey"
+        v-model:activeKey="props.activeKey"
         type="card"
         v-if="realTabs.length > 1"
-        :on-change="changeTab"
       >
         <TabPane v-for="i in realTabs" :key="i.key" :tab="i.title">
           <Table
@@ -52,12 +51,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRef, toRefs } from 'vue'
+import { computed, onMounted, ref, toRaw, toRef, toRefs } from 'vue'
 import {
   schema as defaultSchema,
   dataSource as defaultDataSource
 } from './templete'
-import { Card, Tabs, TabPane, Table, Button } from 'ant-design-vue'
+import { Card, Tabs, TabPane, Table } from 'ant-design-vue'
 import ThemeProvider from '../themeProvider/themeProvider.vue'
 import { joinCss } from 'wa-utils'
 import { formatColumns } from './utils'
@@ -65,16 +64,16 @@ import TableFormRender from '../tableFormRender/tableFormRender.vue'
 
 const slot = defineSlots()
 
-console.log(slot, 'slot')
+const emit = defineEmits()
 
 const props = defineProps({
   schema: Object,
   tableProps: Object,
-  changeTab: Function
+  changeTab: Function,
+  activeKey: String || Number
 })
 const { schema, tableProps } = toRefs(props)
 const realSchema = schema?.value ? schema : toRef(defaultSchema)
-const activeKey = ref(realSchema.value?.tabs?.[0]?.key)
 const dataSource = ref(defaultDataSource)
 const realTabs = computed(() => {
   return realSchema.value?.tabs.map((item: any) => ({
@@ -85,11 +84,12 @@ const realTabs = computed(() => {
     })
   }))
 })
-const changeTab = (value: any) => {
-  if (props.changeTab) {
-    props.changeTab(value)
+
+onMounted(() => {
+  if (!props.activeKey && props.schema?.tabs?.length > 1) {
+    emit('update:activeKey', props.schema?.tabs?.[0]?.key)
   }
-}
+})
 </script>
 
 <style lang="scss">
