@@ -2,9 +2,9 @@ name: Publish Package to npmjs
 
 on:
   push:
-    # branches: [ main ]
-    # paths:
-    #   - 'src/'
+    branches: [main]
+    paths:
+      - 'src/'
     tags:
       - '**'
 
