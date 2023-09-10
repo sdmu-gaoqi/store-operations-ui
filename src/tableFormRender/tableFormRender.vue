@@ -164,7 +164,6 @@ const onFinish = async () => {
 }
 
 const onReset = () => {
-  console.log('aaaaaa')
   formRef.value.resetFields()
   if (submit) {
     submit({})
