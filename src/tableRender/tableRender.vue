@@ -88,7 +88,6 @@ const realTabs = computed(() => {
     })
   }))
 })
-console.log(realTabs, 'realTabs')
 
 onMounted(() => {
   if (!props.activeKey && props.schema?.tabs?.length > 1) {
