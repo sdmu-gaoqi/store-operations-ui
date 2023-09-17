@@ -1,3 +1,5 @@
+import type { TableProps as AntdTableProps } from 'ant-design-vue'
+
 export type ColumnItem = {
   title: string
   dataIndex: string
@@ -12,7 +14,7 @@ export type OptionItem = {
   value: any
 }
 
-export type Schame = {
+export type Schema = {
   title: string
   form: {
     search: boolean
@@ -20,8 +22,16 @@ export type Schame = {
     fields: []
   }
   tabs: { title: string; key: string; columns: ColumnItem[] }[]
+  options: Record<
+    string,
+    Partial<Record<'label' | 'value' | 'key' | string, any>>
+  >
 }
 
 export interface TableProps {
-  schame: Schame
+  schema: Schema
+  tableProps?: AntdTableProps
+  changeTab?: (v: string) => void
+  activeKey?: string
+  onSearch: (data: Record<string, any>) => Promise<void> | void
 }
