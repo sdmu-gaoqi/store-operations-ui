@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "vitepress dev docs",
-    "build": "vue-tsc && vite build",
+    "build": "vite build && vue-tsc",
     "preview": "vite preview",
     "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\"",
     "lint": "npm run tsc && npm run lint:demo && npm run lint:md && npm run lint:script && npm run lint:site",
