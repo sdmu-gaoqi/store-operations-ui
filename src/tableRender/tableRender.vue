@@ -4,6 +4,7 @@
       <TableFormRender
         :options="schema && schema.options"
         :form="schema && schema.form"
+        :submit="formChange"
       >
         <template #formButton><slot.formButton></slot.formButton></template
       ></TableFormRender>
@@ -65,17 +66,14 @@ import ThemeProvider from '../themeProvider/themeProvider.vue'
 import { joinCss } from 'wa-utils'
 import { formatColumns } from './utils'
 import TableFormRender from '../tableFormRender/tableFormRender.vue'
+import type { TableProps } from './typing'
 
 const slot = defineSlots()
 
 const emit = defineEmits()
 
-const props = defineProps({
-  schema: Object,
-  tableProps: Object,
-  changeTab: Function,
-  activeKey: String || Number
-})
+const props = defineProps<TableProps>()
+const { onSearch } = props
 const { schema, tableProps } = toRefs(props)
 const realSchema = schema?.value ? schema : toRef(defaultSchema)
 const dataSource = ref(defaultDataSource)
@@ -88,6 +86,12 @@ const realTabs = computed(() => {
     })
   }))
 })
+
+const formChange = (value: Parameters<typeof onSearch>[0]) => {
+  if (onSearch) {
+    onSearch(value)
+  }
+}
 
 onMounted(() => {
   if (!props.activeKey && props.schema?.tabs?.length > 1) {

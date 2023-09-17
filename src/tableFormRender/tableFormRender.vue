@@ -125,7 +125,7 @@ const getFormValue = async () => {
   const res = await formRef.value.validate()
   for (let k in res) {
     const target = fields.value.find((item: any) => item.key === k)
-    if (target && target.type) {
+    if (target && target.type && res[k]) {
       if (target.type === 'date') {
         let dateFormat = 'YYYY-MM-DD'
         if (target.format === 'month') {
