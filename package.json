@@ -3,13 +3,13 @@
   "description": "vue 组件库",
   "version": "0.2.1",
   "type": "module",
-  "main": "dist/store-operations-ui.es.js",
+  "main": "dist/index.d.ts",
   "files": [
     "dist/*"
   ],
   "scripts": {
     "dev": "vitepress dev docs",
-    "build": "vue-tsc && vite build",
+    "build": "vite build && vue-tsc",
     "preview": "vite preview",
     "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\"",
     "lint": "npm run tsc && npm run lint:demo && npm run lint:md && npm run lint:script && npm run lint:site",
