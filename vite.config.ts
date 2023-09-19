@@ -53,13 +53,13 @@ export default defineConfig({
   build: {
     target: 'es2015',
     outDir: './dist',
-    cssCodeSplit: false,
+    cssCodeSplit: true,
     cssTarget: ['chrome61']
     // lib: {
     //   entry: resolve(__dirname, 'src/index.ts'),
     //   name: 'store-operations-ui',
     //   fileName: (format) => `store-operations-ui.${format}.js`
-    // },
+    // }
     // rollupOptions: {
     //   external: ['vue'],
     //   output: {
@@ -67,7 +67,6 @@ export default defineConfig({
     //       vue: 'Vue'
     //     }
     //   }
-    // },
-    // cssCodeSplit: true
+    // }
   }
 })
