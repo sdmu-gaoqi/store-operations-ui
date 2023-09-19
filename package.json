@@ -3,8 +3,8 @@
   "description": "vue 组件库",
   "version": "0.2.1",
   "type": "module",
-  "main": "./dist/index.d.ts",
-  "module": "./dist/index.d.ts",
+  "main": "./dist/store-operations-ui.es.js",
+  "module": "./dist/store-operations-ui.es.js",
   "files": [
     "dist/*"
   ],
