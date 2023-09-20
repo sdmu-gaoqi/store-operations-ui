@@ -73,7 +73,7 @@ const slot = defineSlots()
 const emit = defineEmits()
 
 const props = defineProps<TableProps>()
-const { onSearch } = props
+const { onSearch = () => {} } = props
 const { schema, tableProps } = toRefs(props)
 const realSchema = schema?.value ? schema : toRef(defaultSchema)
 const dataSource = ref(defaultDataSource)

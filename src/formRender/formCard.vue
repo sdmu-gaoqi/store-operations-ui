@@ -1,6 +1,6 @@
 <template>
   <ThemeProvider>
-    <Card :title="props.title" class="op-ui-form-card shadow">
+    <Card :title="props.title" class="shadow op-ui-form-card">
       <template v-if="!props.hiddenDesc" #extra
         ><div class="flex items-center">
           <template v-if="isEmpty(props.desc)">
@@ -51,8 +51,8 @@ import ThemeProvider from '../themeProvider/themeProvider.vue'
 const slot = defineSlots()
 export interface FormCardProps {
   title: string
-  desc: string
-  hiddenDesc: boolean
+  desc?: string
+  hiddenDesc?: boolean
   footer?: {
     cancel: boolean | string
     submit: boolean | string
