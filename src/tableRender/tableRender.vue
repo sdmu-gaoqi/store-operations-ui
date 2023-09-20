@@ -82,7 +82,7 @@ const realTabs = computed(() => {
     ...item,
     columns: formatColumns({
       columns: item.columns,
-      options: realSchema.value?.options
+      options: realSchema.value?.options || []
     })
   }))
 })

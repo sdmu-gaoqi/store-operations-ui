@@ -3,10 +3,10 @@ import type { TableProps as AntdTableProps } from 'ant-design-vue'
 export type ColumnItem = {
   title: string
   dataIndex: string
-  render: any
-  format: 'money' | string
-  options: 'detail'[]
-  tableProps: Object
+  render?: any
+  format?: 'money' | string
+  options?: any[]
+  tableProps?: Object
 }
 
 export type OptionItem = {
@@ -14,15 +14,22 @@ export type OptionItem = {
   value: any
 }
 
+export type TableField = Record<string, any> & {
+  type: 'search' | 'select' | 'date' | string
+  label: string
+  placeholder?: string
+  key: string
+}
+
 export type Schema = {
   title: string
   form: {
     search: boolean
     export: boolean
-    fields: []
+    fields: TableField[]
   }
   tabs: { title: string; key: string; columns: ColumnItem[] }[]
-  options: Record<
+  options?: Record<
     string,
     Partial<Record<'label' | 'value' | 'key' | string, any>>
   >
@@ -34,4 +41,5 @@ export interface TableProps {
   changeTab?: (v: string) => void
   activeKey?: string
   onSearch: (data: Record<string, any>) => Promise<void> | void
+  request: (data: any) => any
 }

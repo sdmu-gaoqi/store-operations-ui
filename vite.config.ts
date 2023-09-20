@@ -51,23 +51,22 @@ export default defineConfig({
     exclude: ['fsevents']
   },
   build: {
-    target: 'es2015',
-    outDir: './dist',
-    cssCodeSplit: false,
-    cssTarget: ['chrome61']
-    // lib: {
-    //   entry: resolve(__dirname, 'src/index.ts'),
-    //   name: 'store-operations-ui',
-    //   fileName: (format) => `store-operations-ui.${format}.js`
-    // },
-    // rollupOptions: {
-    //   external: ['vue'],
-    //   output: {
-    //     globals: {
-    //       vue: 'Vue'
-    //     }
-    //   }
-    // },
-    // cssCodeSplit: true
+    // target: 'es2015',
+    // outDir: './dist',
+    // cssCodeSplit: false,
+    // cssTarget: ['chrome61'],
+    lib: {
+      entry: resolve(__dirname, 'src/index.ts'),
+      name: 'store-operations-ui',
+      fileName: (format) => `store-operations-ui.${format}.js`
+    },
+    rollupOptions: {
+      external: ['vue'],
+      output: {
+        globals: {
+          vue: 'Vue'
+        }
+      }
+    }
   }
 })

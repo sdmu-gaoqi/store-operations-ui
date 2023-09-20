@@ -1,9 +1,10 @@
 {
   "name": "store-operations-ui",
   "description": "vue 组件库",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
-  "main": "dist/index.d.ts",
+  "main": "./dist/index.d.ts",
+  "module": "./dist/store-operations-ui.es.js",
   "files": [
     "dist/*"
   ],
@@ -60,6 +61,7 @@
     "url": "^0.11.1",
     "vue": "^3.3.4",
     "vue-tsc": "^1.8.5",
+    "child_process": "^1.0.2",
     "wa-utils": "0.1.6"
   },
   "devDependencies": {
