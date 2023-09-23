@@ -217,7 +217,7 @@ const onFinish = () => {
     if (props.onFinish) {
       props.onFinish({
         ...value,
-        uuid
+        uuid: uuid.value
       })
     }
   })
