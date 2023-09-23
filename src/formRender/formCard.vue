@@ -20,7 +20,7 @@
           type="primary"
           :ghost="true"
           class="mr-[50px] w-[120px]"
-          :on-click="() => debounce(props?.onCancel)"
+          :on-click="() => debounce(onCancel)"
           >{{
             typeof props?.footer?.cancel === 'string'
               ? props.footer?.cancel
@@ -31,7 +31,7 @@
           v-if="props?.footer?.cancel"
           type="primary"
           class="w-[120px]"
-          :on-click="() => debounce(props?.onSubmit)"
+          :on-click="() => debounce(onSubmit)"
           >{{
             typeof props?.footer?.cancel === 'string'
               ? props.footer?.cancel
@@ -61,6 +61,16 @@ export interface FormCardProps {
   onSubmit?: () => void
 }
 const props = defineProps<FormCardProps>()
+const onCancel = () => {
+  if (props.onCancel) {
+    props.onCancel()
+  }
+}
+const onSubmit = () => {
+  if (props.onSubmit) {
+    props.onSubmit
+  }
+}
 </script>
 
 <style lang="scss">
