@@ -92,6 +92,7 @@
               type="primary"
               class="w-[100%] h-[40px] mt-[20px]"
               @click.prevent="onFinish"
+              :loading="loginLoading"
               >登录</Button
             ></Form.Item
           >
@@ -148,6 +149,7 @@ const phoneConfigs = {
 }
 
 const loginType = ref<LoginType>('userName')
+const loginLoading = ref(false)
 
 const configs = computed(() => {
   const isAccount = loginType.value === 'userName'
@@ -215,10 +217,15 @@ const changeLoginTye = () => {
 const onFinish = () => {
   validate(['account', 'password', 'imgCode']).then((value) => {
     if (props.onFinish) {
-      props.onFinish({
-        ...value,
-        uuid: uuid.value
-      })
+      loginLoading.value = true
+      props
+        .onFinish({
+          ...value,
+          uuid: uuid.value
+        })
+        .finally(() => {
+          loginLoading.value = false
+        })
     }
   })
 }

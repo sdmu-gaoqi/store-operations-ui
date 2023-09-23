@@ -1,12 +1,4 @@
-import {
-  defineComponent,
-  onMounted,
-  // toRefs,
-  toRef,
-  watch,
-  ref,
-  toRaw
-} from 'vue'
+import { defineComponent, onMounted, toRef, watch, ref, toRaw } from 'vue'
 import { joinCss, sleep } from 'wa-utils'
 import './waInput.scss'
 // import { EyeOutlined, EyeInvisibleFilled } from '@ant-design/icons-vue'
@@ -34,6 +26,7 @@ export default defineComponent({
   setup(props, { slots, emit }) {
     const { ...restProps } = props
     const type = toRaw(props.type)
+    const propsValue = toRef(props, 'value')
 
     const labelRef = ref(null)
     const inputRef = ref<HTMLInputElement | null>(null)
@@ -143,6 +136,7 @@ export default defineComponent({
             <input
               ref={inputRef}
               {...restProps}
+              value={propsValue.value}
               autocomplete="off"
               class={`${joinCss(prefixCls, ['input'])}`}
               onBlur={blur}
