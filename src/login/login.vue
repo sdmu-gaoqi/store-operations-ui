@@ -126,8 +126,8 @@ interface FormState {
 }
 
 const formState = reactive<FormState>({
-  account: '',
-  password: '',
+  account: 'admin',
+  password: 'admin123',
   code: '',
   agree: true,
   imgCode: ''

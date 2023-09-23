@@ -1,4 +1,12 @@
-import { defineComponent, onMounted, toRefs, toRef, watch, ref } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  // toRefs,
+  toRef,
+  watch,
+  ref,
+  toRaw
+} from 'vue'
 import { joinCss, sleep } from 'wa-utils'
 import './waInput.scss'
 // import { EyeOutlined, EyeInvisibleFilled } from '@ant-design/icons-vue'
@@ -24,7 +32,8 @@ export default defineComponent({
   props: inputProps,
   emits: ['update:value'],
   setup(props, { slots, emit }) {
-    const { ...restProps } = toRefs(props).value
+    const { ...restProps } = props
+    const type = toRaw(props.type)
 
     const labelRef = ref(null)
     const inputRef = ref<HTMLInputElement | null>(null)
@@ -140,6 +149,7 @@ export default defineComponent({
               onFocus={focus}
               onInput={_input}
               placeholder={''}
+              type={type}
             ></input>
             <div
               class={joinCss(prefixCls, ['label'])}
