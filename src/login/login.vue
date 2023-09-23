@@ -53,6 +53,20 @@
               >
             </Input></Form.Item
           >
+          <Form.Item v-bind="validateInfos.imgCode" class="absolute">
+            <Input
+              :label="'请输入验证码'"
+              class="login-input"
+              v-model:value="formState.imgCode"
+            >
+              <template #suffix> </template>
+              >
+            </Input>
+            <img
+              :src="imgCodeUrl"
+              @click="getImgCode"
+              class="min-w-[100px] absolute top-0 right-0 h-[36px] cursor-pointer"
+          /></Form.Item>
           <div class="flex justify-between items-center h-[100px]">
             <Form.Item
               v-show="loginType === 'userName'"
@@ -90,7 +104,7 @@
 <script setup lang="ts">
 import { Input } from '@/index'
 import { UserOutlined } from '@ant-design/icons-vue'
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, onMounted } from 'vue'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import type { LoginType } from './typing'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
@@ -108,13 +122,15 @@ interface FormState {
   password: string
   code: string
   agree: boolean
+  imgCode: string
 }
 
 const formState = reactive<FormState>({
   account: '',
   password: '',
   code: '',
-  agree: true
+  agree: true,
+  imgCode: ''
 })
 
 const accountConfigs = {
@@ -197,7 +213,7 @@ const changeLoginTye = () => {
 }
 
 const onFinish = () => {
-  validate(['account', 'password']).then((value) => {
+  validate(['account', 'password', 'imgCode']).then((value) => {
     if (props.onFinish) {
       props.onFinish(value)
     }
@@ -211,6 +227,18 @@ const isAccount = computed(() => {
 watch([formState.agree, formState.password], () => {
   if (formState.agree) {
   }
+})
+
+const imgCodeUrl = ref('')
+const getImgCode = () => {
+  fetch('http://vue.ruoyi.vip/prod-api/captchaImage')
+    .then((res) => res.json())
+    .then((res) => {
+      imgCodeUrl.value = `data:image/gif;base64,${res.img}`
+    })
+}
+onMounted(() => {
+  getImgCode()
 })
 </script>
 

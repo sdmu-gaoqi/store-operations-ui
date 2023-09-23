@@ -44,5 +44,5 @@ export interface TableProps {
   changeTab?: (v: string) => void
   activeKey?: string
   onSearch?: (data: Record<string, any>) => Promise<void> | void
-  request?: (data: any) => any
+  request?: (data?: any) => Promise<void>
 }
