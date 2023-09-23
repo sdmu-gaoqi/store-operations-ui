@@ -22,8 +22,15 @@
                 ? tableProps.scroll
                 : { x: 2000, y: '80vh' }
             "
-            :dataSource="dataSource"
+            :dataSource="listData?.rows"
             :bordered="true"
+            :loading="loading"
+            :on-change="changePage"
+            :pagination="{
+              current: listData?.current,
+              pageSize: listData?.pageSize,
+              total: listData?.total
+            }"
           >
             <slot.default v-if="slot.default"></slot.default>
             <template #bodyCell="data" v-if="slot.bodyCell">
@@ -42,8 +49,15 @@
             ? tableProps.scroll
             : { x: 2000, y: '80vh' }
         "
-        :dataSource="dataSource"
+        :dataSource="listData?.rows"
         :bordered="true"
+        :loading="loading"
+        :on-change="changePage"
+        :pagination="{
+          current: listData?.current,
+          pageSize: listData?.pageSize,
+          total: listData?.total
+        }"
       >
         <template #bodyCell="data" v-if="slot.bodyCell">
           <slot.bodyCell :data="data"></slot.bodyCell>
@@ -56,17 +70,22 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, toRef, toRefs } from 'vue'
+import { computed, onMounted, toRef, toRefs } from 'vue'
+import { schema as defaultSchema } from './templete'
 import {
-  schema as defaultSchema,
-  dataSource as defaultDataSource
-} from './templete'
-import { Card, Tabs, TabPane, Table } from 'ant-design-vue'
+  Card,
+  Tabs,
+  TabPane,
+  Table,
+  TablePaginationConfig
+} from 'ant-design-vue'
 import ThemeProvider from '../themeProvider/themeProvider.vue'
 import { joinCss } from 'wa-utils'
 import { formatColumns } from './utils'
 import TableFormRender from '../tableFormRender/tableFormRender.vue'
 import type { TableProps } from './typing'
+import { useRequest } from 'vue-hooks-plus'
+import type { CommonResponse, ListResponse } from 'store-request'
 
 const slot = defineSlots()
 
@@ -74,9 +93,20 @@ const emit = defineEmits()
 
 const props = defineProps<TableProps>()
 const { onSearch = () => {} } = props
+
+const request = props.request as unknown as (
+  data: any
+) => Promise<CommonResponse<ListResponse>>
 const { schema, tableProps } = toRefs(props)
+
+const {
+  run,
+  loading,
+  data: listData,
+  params
+} = useRequest<CommonResponse<ListResponse>>(request)
+
 const realSchema = schema?.value ? schema : toRef(defaultSchema)
-const dataSource = ref(defaultDataSource)
 const realTabs = computed(() => {
   return realSchema.value?.tabs.map((item: any) => ({
     ...item,
@@ -91,6 +121,18 @@ const formChange = (value: Parameters<typeof onSearch>[0]) => {
   if (onSearch) {
     onSearch(value)
   }
+  run({
+    ...value
+  })
+}
+
+const changePage = (value: TablePaginationConfig) => {
+  const lastParam = params?.value ? (params?.value?.[0] as {}) : {}
+  run({
+    ...lastParam,
+    pageNum: value.current,
+    pageSize: value.pageSize
+  })
 }
 
 onMounted(() => {
@@ -102,6 +144,7 @@ onMounted(() => {
 
 <style lang="scss">
 .soui-tabs {
+  user-select: none;
   .ant-tabs-tab.ant-tabs-tab-active {
     @apply bg-primary;
     .ant-tabs-tab-btn {
