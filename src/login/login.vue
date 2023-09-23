@@ -215,7 +215,10 @@ const changeLoginTye = () => {
 const onFinish = () => {
   validate(['account', 'password', 'imgCode']).then((value) => {
     if (props.onFinish) {
-      props.onFinish(value)
+      props.onFinish({
+        ...value,
+        uuid
+      })
     }
   })
 }
@@ -230,11 +233,13 @@ watch([formState.agree, formState.password], () => {
 })
 
 const imgCodeUrl = ref('')
+const uuid = ref('')
 const getImgCode = () => {
   fetch('http://vue.ruoyi.vip/prod-api/captchaImage')
     .then((res) => res.json())
     .then((res) => {
       imgCodeUrl.value = `data:image/gif;base64,${res.img}`
+      uuid.value = res.uuid
     })
 }
 onMounted(() => {
