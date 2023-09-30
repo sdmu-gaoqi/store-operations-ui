@@ -1,7 +1,7 @@
 {
   "name": "store-operations-ui",
   "description": "vue 组件库",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "type": "module",
   "main": "./dist/index.d.ts",
   "module": "./dist/store-operations-ui.es.js",
@@ -50,7 +50,7 @@
     "@vitejs/plugin-vue": "^4.2.3",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vueuse/core": "^10.3.0",
-    "ant-design-vue": "^4.0.2",
+    "ant-design-vue": "^4.0.3",
     "autoprefixer": "^10.4.15",
     "babel-eslint": "^10.1.0",
     "child_process": "^1.0.2",
