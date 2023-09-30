@@ -20,23 +20,34 @@
             >{{ configs.checkText }}</span
           >
         </div>
-        <Form autocomplete="off" name="login">
-          <Form.Item class="mb-[40px]" v-bind="validateInfos.account">
+        <Form
+          autocomplete="off"
+          name="login"
+          @onSubmit="onFinish"
+          @onFinishFailed="(value) => console.log(value)"
+        >
+          <Form.Item
+            class="mb-[40px]"
+            v-bind="validateInfos.account"
+            name="account"
+          >
             <Input
               :label="configs.namePlaceholder"
               class="login-input"
               v-model:value="formState.account"
+              @pressEnter="onFinish"
             >
               <template #prefix> <user-outlined /> </template>
               ></Input
             >
           </Form.Item>
-          <Form.Item v-bind="validateInfos.password">
+          <Form.Item v-bind="validateInfos.password" name="password">
             <Input
               :label="configs.passwordPlaceholder"
               class="login-input"
               type="password"
               v-model:value="formState.password"
+              @pressEnter="onFinish"
             >
               <template #prefix> <user-outlined /> </template>
               <template #suffix v-if="!isAccount">
@@ -53,11 +64,17 @@
               >
             </Input></Form.Item
           >
-          <Form.Item v-bind="validateInfos.imgCode" class="absolute">
+          <Form.Item
+            v-bind="validateInfos.imgCode"
+            class="absolute"
+            :rules="[{ required: true, message: '请输入验证码' }]"
+            name="imgCode"
+          >
             <Input
               :label="'请输入验证码'"
               class="login-input"
               v-model:value="formState.imgCode"
+              @pressEnter="onFinish"
             >
               <template #suffix> </template>
               >
@@ -91,11 +108,12 @@
             <Button
               type="primary"
               class="w-[100%] h-[40px] mt-[20px]"
-              @click.prevent="onFinish"
+              htmlType="submit"
               :loading="loginLoading"
+              @click="onFinish"
               >登录</Button
-            ></Form.Item
-          >
+            >
+          </Form.Item>
         </Form>
       </div>
     </div>
@@ -251,6 +269,10 @@ const getImgCode = () => {
 }
 onMounted(() => {
   getImgCode()
+})
+
+defineExpose({
+  getImgCode
 })
 </script>
 

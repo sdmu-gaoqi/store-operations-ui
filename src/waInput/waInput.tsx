@@ -16,7 +16,8 @@ const inputProps = {
   type: String,
   value: String,
   defaultValue: String,
-  'class-name': String
+  'class-name': String,
+  pressEnter: String
 }
 
 export default defineComponent({
