@@ -190,6 +190,9 @@
               </Col>
             </template>
           </Row>
+          <template v-if="slot.after">
+            <slot.after></slot.after>
+          </template>
         </div>
       </div>
       <div
@@ -264,6 +267,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons-vue'
 import { renderSuffix } from './utils'
 import Classify from '@/assets/classify.svg'
 
+const slot = defineSlots()
 const props = defineProps<FormRenderProps>()
 const schema = toRef(props, 'schema')
 const column = computed(() => {

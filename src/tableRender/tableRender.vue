@@ -22,7 +22,7 @@
                 ? tableProps.scroll
                 : { x: 2000, y: '80vh' }
             "
-            :dataSource="listData?.rows"
+            :dataSource="list ? list : listData?.rows"
             :bordered="true"
             :loading="loading"
             :on-change="changePage"
@@ -49,7 +49,7 @@
             ? tableProps.scroll
             : { x: 2000, y: '80vh' }
         "
-        :dataSource="listData?.rows"
+        :dataSource="list ? list : listData?.rows"
         :bordered="true"
         :loading="loading"
         :on-change="changePage"
@@ -97,7 +97,7 @@ const { onSearch = () => {} } = props
 const request = props.request as unknown as (
   data: any
 ) => Promise<CommonResponse<ListResponse>>
-const { schema, tableProps } = toRefs(props)
+const { schema, tableProps, list } = toRefs(props)
 
 const {
   run,

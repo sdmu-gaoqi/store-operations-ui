@@ -9,6 +9,7 @@ export type ColumnItem = Record<string, any> & {
   tableProps?: Object
   fixed?: 'left' | 'right' | boolean
   width?: any
+  list?: Record<string, any>
 }
 
 export type OptionItem = {
@@ -45,4 +46,5 @@ export interface TableProps {
   activeKey?: string
   onSearch?: (data: Record<string, any>) => Promise<void> | void
   request?: (data?: any) => Promise<void>
+  list?: Record<string, any>[]
 }

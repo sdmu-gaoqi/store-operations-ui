@@ -1626,7 +1626,7 @@ ansi-styles@^6.0.0, ansi-styles@^6.1.0:
   resolved "https://registry.npmmirror.com/ansi-styles/-/ansi-styles-6.2.1.tgz#0e62320cf99c21afff3b3012192546aacbfb05c5"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
 
-ant-design-vue@^4.0.3:
+ant-design-vue@^4.0.0, ant-design-vue@^4.0.3:
   version "4.0.3"
   resolved "https://registry.npmjs.org/ant-design-vue/-/ant-design-vue-4.0.3.tgz#0f283c4507368ce4fb658effece3d890394f8c4a"
   integrity sha512-fbgZbbirLx7rc19ytaGxApwS01CKLRzvEZmH0TVF06niQA9ekx7xkvfQGlmiSaCs4b8nWZi4Bo7gUzRNRt5YJA==
@@ -6026,12 +6026,13 @@ stop-iteration-iterator@^1.0.0:
   dependencies:
     internal-slot "^1.0.4"
 
-store-request@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.npmjs.org/store-request/-/store-request-0.0.3.tgz#1e25d8f92af40e3a0abedca1935078a629d8da7d"
-  integrity sha512-nVVa5tBmMBUL6UNpyf+u8EUOZqKHqUZCIDb6SX4sllBe7CHFBIxGUXnm9C70ARXOD11t3W7A/8vRPfvnR/9rNA==
+store-request@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/store-request/-/store-request-0.0.4.tgz#af50a540a6ff5352e92113547ed0bd935df9bf7c"
+  integrity sha512-xZU7KUzNp7FUzdlglanz7gqR/pWjcF44eNxWWHWeReNGIU3m6t4LPonWUv3lR3GLbVSzQUvXHhNR/CSXT5juyg==
   dependencies:
     "@types/lodash" "^4.14.198"
+    ant-design-vue "^4.0.0"
     axios "^1.4.0"
     copy-to-clipboard "^3.3.3"
     dayjs "^1.11.9"
