@@ -3,7 +3,7 @@
     :locale="locale"
     :theme="{
       token: {
-        colorPrimary: '#585eaa',
+        colorPrimary: '#7749a3',
         colorTextBase: '#6a6d82',
         colorBgBase: '#fff',
         borderRadius: 20
