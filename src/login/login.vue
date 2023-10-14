@@ -1,53 +1,55 @@
 <template>
-  <ThemeProvider>
-    <div
-      class="shadow-lg bg-white flex items-start rounded-[10px] overflow-hidden w-[796px]"
-    >
-      <div class="login-banner">
-        <div class="login-banner-content">
-          <div class="mb-[50px]">门店管理系统</div>
-          <div class="text-[14px]">版本号：V1.0.0</div>
-        </div>
-      </div>
-
+  <div class="login-wrapper">
+    <ThemeProvider>
       <div class="login-content">
-        <div class="login-title mb-[50px] flex items-center">
-          {{ configs.title }}
-
-          <span
-            class="text-primary text-[12px] cursor-pointer ml-auto select-none"
-            @click="changeLoginTye"
-            >{{ configs.checkText }}</span
-          >
-        </div>
         <Form
           autocomplete="off"
           name="login"
           @onSubmit="onFinish"
           @onFinishFailed="(value) => console.log(value)"
+          class="login-form"
         >
-          <Form.Item
-            class="mb-[40px]"
-            v-bind="validateInfos.account"
-            name="account"
+          <div
+            class="login-title text-[#363441] text-[22px] font-bold mb-[30px]"
           >
+            欢迎登录
+            <div class="mt-[10px]">
+              <span
+                :class="`login-tab ${
+                  loginType === 'userName' && ' loginActiveTab'
+                }`"
+                @click="() => changeLoginTye('userName')"
+                >账号登录</span
+              >
+              <span
+                :class="`login-tab ${
+                  loginType === 'phone' && ' loginActiveTab'
+                }`"
+                @click="() => changeLoginTye('phone')"
+                >手机号登陆</span
+              >
+            </div>
+          </div>
+          <Form.Item v-bind="validateInfos.account" name="account">
             <Input
               :label="configs.namePlaceholder"
               class="login-input"
               v-model:value="formState.account"
               @pressEnter="onFinish"
+              size="large"
             >
               <template #prefix> <user-outlined /> </template>
               ></Input
             >
           </Form.Item>
           <Form.Item v-bind="validateInfos.password" name="password">
-            <Input
+            <Input.Password
               :label="configs.passwordPlaceholder"
               class="login-input"
               type="password"
               v-model:value="formState.password"
               @pressEnter="onFinish"
+              size="large"
             >
               <template #prefix> <user-outlined /> </template>
               <template #suffix v-if="!isAccount">
@@ -62,19 +64,16 @@
                 >
               </template>
               >
-            </Input></Form.Item
+            </Input.Password></Form.Item
           >
-          <Form.Item
-            v-bind="validateInfos.imgCode"
-            class="absolute"
-            :rules="[{ required: true, message: '请输入验证码' }]"
-            name="imgCode"
-          >
+          <Form.Item v-bind="validateInfos.imgCode" name="imgCode">
             <Input
               :label="'请输入验证码'"
               class="login-input"
               v-model:value="formState.imgCode"
               @pressEnter="onFinish"
+              size="large"
+              placeholder="请输入验证码"
             >
               <template #suffix> </template>
               >
@@ -82,9 +81,9 @@
             <img
               :src="imgCodeUrl"
               @click="getImgCode"
-              class="min-w-[100px] absolute top-0 right-0 h-[36px] cursor-pointer"
+              class="min-w-[100px] absolute top-0 z-10 right-0 h-[40px] cursor-pointer"
           /></Form.Item>
-          <div class="flex justify-between items-center h-[100px]">
+          <div class="flex justify-between items-center pt-[10px]">
             <Form.Item
               v-show="loginType === 'userName'"
               name="agree"
@@ -94,7 +93,7 @@
               <Checkbox
                 :checked="formState.agree"
                 @change="(v) => (formState.agree = v.target.checked)"
-                >记住密码</Checkbox
+                >自动登录</Checkbox
               >
             </Form.Item>
             <div
@@ -107,7 +106,7 @@
           <Form.Item>
             <Button
               type="primary"
-              class="w-[100%] h-[40px] mt-[20px]"
+              class="w-[100%] h-[40px] mt-[20px] rounded-[6px]"
               htmlType="submit"
               :loading="loginLoading"
               @click="onFinish"
@@ -116,18 +115,17 @@
           </Form.Item>
         </Form>
       </div>
-    </div>
-  </ThemeProvider>
+    </ThemeProvider>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Input } from '@/index'
 import { UserOutlined } from '@ant-design/icons-vue'
 import { computed, reactive, ref, watch, onMounted } from 'vue'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import type { LoginType } from './typing'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import { Checkbox, Button, Form } from 'ant-design-vue'
+import { Checkbox, Button, Form, Input } from 'ant-design-vue'
 import { useInterval } from '@vueuse/core'
 import ThemeProvider from '../themeProvider/themeProvider.vue'
 
@@ -227,9 +225,9 @@ watch(counter, () => {
   }
 })
 
-const changeLoginTye = () => {
+const changeLoginTye = (type: 'userName' | 'phone') => {
   clearValidate()
-  loginType.value = loginType.value === 'userName' ? 'phone' : 'userName'
+  loginType.value = type
 }
 
 const onFinish = () => {
@@ -277,19 +275,45 @@ defineExpose({
 </script>
 
 <style lang="scss">
-.login-banner {
-  @apply w-[396px] min-h-[538px] bg-gradient-to-r from-blue-300 to-blue-100 flex items-center justify-center;
-  .login-banner-content {
-    @apply text-white h-[100%] w-[100%] text-center text-[20px];
-  }
-  * {
-    box-sizing: border-box;
-  }
+.login-wrapper {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  user-select: none;
 }
 .login-content {
-  @apply w-[400px] min-h-[538px] py-[50px] px-[40px] box-border;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/loginBanner.png');
+  background-size: cover;
+  min-width: 1366px;
+  min-height: 756px;
+  position: relative;
+  padding: 0;
   * {
     box-sizing: border-box;
   }
+  .login-form {
+    position: absolute;
+    left: 60%;
+    top: 25vh;
+    width: 25%;
+  }
+}
+
+.login-tab {
+  font-size: 14px;
+  color: #6e7da6;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.loginActiveTab {
+  @apply text-primary;
+}
+
+.login-input {
+  border-radius: 6px;
+  width: 100%;
 }
 </style>
