@@ -52,7 +52,7 @@ const editSchema = {
       defaultValue: 'hhhhhh',
       required: true,
       maxWidth: '340px',
-      widget: 'input',
+      widget: 'text',
       props: {
         placeholder: '请输入',
         maxLength: 10,

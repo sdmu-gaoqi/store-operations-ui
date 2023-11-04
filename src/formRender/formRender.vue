@@ -7,6 +7,7 @@
       name="basic"
       ref="formRef"
       :rules="schema.rules"
+      :on-fields-change="props.onFieldsChanged"
     >
       <div class="op-ui-form-render-body">
         <div
@@ -277,6 +278,7 @@ const column = computed(() => {
 const formState = ref<Record<string, any>>({})
 const formRef = ref()
 const schemaProperties = Object.entries(schema?.value?.properties || {})
+
 schemaProperties.forEach(([key, value]) => {
   formState.value[key] = value?.defaultValue || undefined
 })
@@ -331,6 +333,9 @@ const cancel = () => {
     props.onCancel()
   }
 }
+defineExpose({
+  formRef
+})
 </script>
 
 <style lang="scss">
