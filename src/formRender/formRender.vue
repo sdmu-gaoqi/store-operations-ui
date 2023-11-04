@@ -243,7 +243,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRaw, toRef, defineExpose } from 'vue'
+import { computed, ref, toRaw, toRef } from 'vue'
 import { joinCss } from 'wa-utils'
 import {
   Form,
