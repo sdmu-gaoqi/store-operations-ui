@@ -80,4 +80,5 @@ export type FormRenderProps = {
   schema: Schema
   onFinish: (value: Record<string, any>) => void
   onCancel?: () => void
+  onFieldsChanged?: (value: Record<string, any>) => void
 }
