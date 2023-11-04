@@ -179,6 +179,13 @@
                     :style="item?.props?.style || {}"
                     :disabled="item.props?.disabled"
                   ></Rate>
+                  <Table
+                    v-if="item.widget === 'table'"
+                    :columns="item.props?.columns"
+                    :data-source="item.props?.dataSource"
+                    :scroll="item.props?.scroll"
+                    :pagination="item.props?.pagination"
+                  />
                 </Form.Item>
               </Col>
               <Col :span="24" v-if="key.startsWith('op-group')">
@@ -260,7 +267,8 @@ import {
   CheckboxGroup,
   RadioGroup,
   Rate,
-  Tooltip
+  Tooltip,
+  Table
 } from 'ant-design-vue'
 import ThemeProvider from '../themeProvider/themeProvider.vue'
 import { FormRenderProps } from './type'
