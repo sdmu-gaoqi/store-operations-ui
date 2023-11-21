@@ -1,9 +1,32 @@
 import { cloneDeep, toThousands } from 'wa-utils'
 import type { ColumnItem, OptionItem } from './typing'
+// @ts-ignore
+import dayjs from 'dayjs'
 
 interface FormatParams {
   columns: any[]
   options: Record<string, any>
+}
+
+export const formatColumn = ({ column, val }: { column: any; val: any }) => {
+  if (column.format === 'money') {
+    return toThousands(val.text)
+  }
+  if (column.format === 'time') {
+    return val.text ? dayjs(val.text).format('YYYY-MM-DD HH:mm:ss') : ''
+  }
+  if (column.format === 'date') {
+    return val.text ? dayjs(val.text).format('YYYY-MM-DD') : ''
+  }
+  if (column.options) {
+    return (
+      column.options?.find((item: any) => item.value === val.text)?.label || ''
+    )
+  }
+  if (column.isIndex) {
+    return val.index + 1
+  }
+  return val.text
 }
 
 export const formatColumns = ({ columns = [], options = {} }: FormatParams) => {
@@ -14,6 +37,28 @@ export const formatColumns = ({ columns = [], options = {} }: FormatParams) => {
     if (item.format === 'money') {
       newItem.customRender = (val: any) => {
         return toThousands(val.text)
+      }
+    }
+    if (item.format === 'time') {
+      newItem.customRender = (val: any) => {
+        return val.text ? dayjs(val.text).format('YYYY-MM-DD HH:mm:ss') : ''
+      }
+    }
+    if (item.format === 'date') {
+      newItem.customRender = (val: any) => {
+        return val.text ? dayjs(val.text).format('YYYY-MM-DD') : ''
+      }
+    }
+    if (item.options) {
+      newItem.customRender = (val: any) => {
+        return (
+          item.options?.find((item) => item.value === val.text)?.label || ''
+        )
+      }
+    }
+    if (item.isIndex) {
+      newItem.customRender = (val: any) => {
+        return val.index + 1
       }
     }
     return {

@@ -3,10 +3,9 @@
     :locale="locale"
     :theme="{
       token: {
-        colorPrimary: '#6300bb',
+        colorPrimary: '#6102fd',
         colorTextBase: '#6a6d82',
-        colorBgBase: '#fff',
-        borderRadius: 20
+        colorBgBase: '#fff'
       }
     }"
     ><solt.default></solt.default

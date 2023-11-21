@@ -73,12 +73,24 @@ export interface SchemaBase {
     reset?: boolean | string
     cancel?: boolean | string
   }
+  'ui:hidden': boolean | string
+  search?: {
+    key?: string // 搜索的key
+    label?: string // label字段,
+    value?: string // value字段
+    request: any // 请求
+    dataKey: string // 渲染的data
+  }
 }
 export type Schema = Partial<SchemaBase>
 
 export type FormRenderProps = {
   schema: Schema
-  onFinish: (value: Record<string, any>) => void
+  onFinish?: (value: Record<string, any>) => void
   onCancel?: () => void
-  onFieldsChanged?: (value: Record<string, any>) => void
+  onFieldsChanged?: (
+    value: Record<string, any>,
+    data: { preState: any; nextState: any }
+  ) => void
+  onFieldChange?: (key: any, value: any) => void
 }

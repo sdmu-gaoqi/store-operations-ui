@@ -34,7 +34,12 @@
           >
             <slot.default v-if="slot.default"></slot.default>
             <template #bodyCell="data" v-if="slot.bodyCell">
-              <slot.bodyCell :data="data"></slot.bodyCell>
+              <slot.bodyCell
+                :data="{
+                  ...data,
+                  customer: formatColumn({ column: data.column, val: data })
+                }"
+              ></slot.bodyCell>
             </template>
             <template #title v-if="slot.title"><slot.title /></template>
             <template #footer v-if="slot.footer"><slot.footer /></template>
@@ -60,7 +65,12 @@
         }"
       >
         <template #bodyCell="data" v-if="slot.bodyCell">
-          <slot.bodyCell :data="data"></slot.bodyCell>
+          <slot.bodyCell
+            :data="{
+              ...data,
+              customer: formatColumn({ column: data.column, val: data })
+            }"
+          ></slot.bodyCell>
         </template>
         <template #title v-if="slot.title"><slot.title /></template>
         <template #footer v-if="slot.footer"><slot.footer /></template>
@@ -79,9 +89,11 @@ import {
   Table,
   TablePaginationConfig
 } from 'ant-design-vue'
+// @ts-ignore
 import ThemeProvider from '../themeProvider/themeProvider.vue'
 import { joinCss } from 'wa-utils'
-import { formatColumns } from './utils'
+import { formatColumns, formatColumn } from './utils'
+// @ts-ignore
 import TableFormRender from '../tableFormRender/tableFormRender.vue'
 import type { TableProps } from './typing'
 import { useRequest } from 'vue-hooks-plus'
@@ -91,12 +103,18 @@ const slot = defineSlots()
 
 const emit = defineEmits()
 
-const props = defineProps<TableProps>()
+const props = defineProps({
+  schema: Object,
+  tableProps: Object,
+  changeTab: Function,
+  activeKey: String,
+  onSearch: Function,
+  request: Function,
+  list: Array,
+  formatParams: Function
+}) as TableProps
 const { onSearch = () => {} } = props
 
-const request = props.request as unknown as (
-  data: any
-) => Promise<CommonResponse<ListResponse>>
 const { schema, tableProps, list } = toRefs(props)
 
 const {
@@ -104,7 +122,7 @@ const {
   loading,
   data: listData,
   params
-} = useRequest<CommonResponse<ListResponse>>(request)
+} = useRequest<CommonResponse<ListResponse>>(props.request)
 
 const realSchema = schema?.value ? schema : toRef(defaultSchema)
 const realTabs = computed(() => {
@@ -121,8 +139,9 @@ const formChange = (value: Parameters<typeof onSearch>[0]) => {
   if (onSearch) {
     onSearch(value)
   }
+  const params = props.formatParams ? props.formatParams(value) : value
   run({
-    ...value
+    ...params
   })
 }
 
@@ -139,6 +158,11 @@ onMounted(() => {
   if (!props.activeKey && props.schema?.tabs?.length > 1) {
     emit('update:activeKey', props.schema?.tabs?.[0]?.key)
   }
+})
+
+defineExpose({
+  run,
+  params
 })
 </script>
 

@@ -2,7 +2,7 @@ export const schema = {
   title: '订单列表',
   form: {
     search: true,
-    export: true,
+    export: false,
     fields: []
   },
   tabs: [

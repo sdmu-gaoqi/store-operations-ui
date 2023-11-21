@@ -8,6 +8,7 @@
       :on-finish="onFinish"
       :on-cancel="onCancel"
       :schema="editSchema"
+      :onFieldsChanged="() => {}"
     ></FormRender>
   </template>
 </FormCard>
@@ -34,6 +35,9 @@ export default defineComponent({
 import { FormRender, FormCard } from '../../src/index'
 import { debounce } from 'wa-utils'
 import 'ant-design-vue/dist/reset.css';
+import { Member } from 'store-request'
+
+const member = new Member()
 
 const editSchema = {
   type: 'object',
@@ -46,6 +50,21 @@ const editSchema = {
     ]
   },
   properties: {
+    memberId: {
+      title: '查找会员',
+      type: 'string',
+      search: {
+        key: 'memberName',
+        label: 'memberName',
+        value: 'memberId',
+        request: member.list,
+        dataKey: 'rows'
+      },
+      props: {
+        options: [ { memberName: 'hh', memberId: 'hh', hidden: true } ]
+      },
+      widget: 'searchSelect'
+    },
     name: {
       title: '房间名称',
       type: 'string',
@@ -62,7 +81,8 @@ const editSchema = {
         required: '请输入房间名称',
         min: '超出最大限制'
       },
-      min: 12
+      min: 12,
+      'ui:hidden': "formState.value.id === 1" // 关联字段 处理动态展示
     },
     id: {
       title: '房间id',
@@ -267,7 +287,15 @@ const editSchema = {
       required: true,
       message: {
         required: ' 请输入房间编号',
-        pattern: '请输入数字'
+        pattern: '请输入数字',
+      },
+      props: {
+        options: [
+          {
+            label: '1折',
+            value: '1'
+          }
+        ]
       },
       pattern: '/^\\d+$/',
       widget: 'input'

@@ -114,7 +114,7 @@ const getOptions = (key: string) => {
   } else if (options.value) {
     const target = options?.value?.[key]
     if (target) {
-      return target
+      return [{ label: '全部', value: '' }, ...target]
     }
     return []
   }
@@ -124,11 +124,18 @@ const getFormValue = async () => {
   const value: Record<string, any> = {}
   const res = await formRef.value.validate()
   for (let k in res) {
+    const field = props.form?.fields?.find((item: any) => item.key === k)
+    const keys = [
+      field?.names?.[0] || field?.key,
+      field?.names?.[1] || field?.key
+    ]
     const target = fields.value.find((item: any) => item.key === k)
     if (target && target.type && res[k]) {
       if (target.type === 'date') {
         let dateFormat = 'YYYY-MM-DD'
-        if (target.format === 'month') {
+        if (target.format === 'timestamp') {
+          value[k] = +new Date(res[k])
+        } else if (target.format === 'month') {
           dateFormat = 'YYYY-MM'
         } else if (target.format === 'year') {
           dateFormat = 'YYYY'
@@ -138,7 +145,10 @@ const getFormValue = async () => {
         value[k] = res[k].format(dateFormat)
       } else if (target.type === 'range') {
         let dateFormat = 'YYYY-MM-DD'
-        if (target.format === 'month') {
+        if (target.format === 'timestamp') {
+          value[keys?.[0]] = +new Date(res[k]?.[0])
+          value[keys?.[1]] = +new Date(res[k]?.[1])
+        } else if (target.format === 'month') {
           dateFormat === 'YYYY-MM'
         } else if (target.format === 'year') {
           dateFormat = 'YYYY'
