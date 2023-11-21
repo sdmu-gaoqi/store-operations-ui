@@ -5,15 +5,13 @@
         <Form
           autocomplete="off"
           name="login"
-          @onSubmit="onFinish"
           @onFinishFailed="(value) => console.log(value)"
           class="login-form"
         >
           <div
             class="login-title text-[#363441] text-[22px] font-bold mb-[30px]"
           >
-            欢迎登录
-            <div class="mt-[10px]">
+            <div class="mt-[10px] flex items-center justify-center">
               <span
                 :class="`login-tab ${
                   loginType === 'userName' && ' loginActiveTab'
@@ -21,6 +19,7 @@
                 @click="() => changeLoginTye('userName')"
                 >账号登录</span
               >
+              <div class="w-[1px] h-[16px] bg-slate-600 mx-[20px]" />
               <span
                 :class="`login-tab ${
                   loginType === 'phone' && ' loginActiveTab'
@@ -35,7 +34,6 @@
               :label="configs.namePlaceholder"
               class="login-input"
               v-model:value="formState.account"
-              @pressEnter="onFinish"
               size="large"
             >
               <template #prefix> <user-outlined /> </template>
@@ -48,7 +46,6 @@
               class="login-input"
               type="password"
               v-model:value="formState.password"
-              @pressEnter="onFinish"
               size="large"
             >
               <template #prefix> <user-outlined /> </template>
@@ -71,7 +68,6 @@
               :label="'请输入验证码'"
               class="login-input"
               v-model:value="formState.imgCode"
-              @pressEnter="onFinish"
               size="large"
               placeholder="请输入验证码"
             >
@@ -125,13 +121,18 @@ import { computed, reactive, ref, watch, onMounted } from 'vue'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import type { LoginType } from './typing'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-import { Checkbox, Button, Form, Input } from 'ant-design-vue'
+import { Checkbox, Button, Form, Input, message } from 'ant-design-vue'
 import { useInterval } from '@vueuse/core'
 import ThemeProvider from '../themeProvider/themeProvider.vue'
+import { CommonService, User } from 'store-request'
+
+const commonService = new CommonService()
+const userService = new User()
 
 const props = defineProps({
   onFinish: Function,
-  getCode: Function
+  getCode: Function,
+  loginAfter: Function
 })
 
 interface FormState {
@@ -232,17 +233,23 @@ const changeLoginTye = (type: 'userName' | 'phone') => {
 
 const onFinish = () => {
   validate(['account', 'password', 'imgCode']).then((value) => {
-    if (props.onFinish) {
-      loginLoading.value = true
-      props
-        .onFinish({
-          ...value,
-          uuid: uuid.value
-        })
-        .finally(() => {
-          loginLoading.value = false
-        })
-    }
+    userService
+      .login({
+        username: value.account,
+        password: value.password,
+        code: value.imgCode,
+        uuid: uuid.value
+      })
+      .then((res) => {
+        if (props.loginAfter) {
+          props.loginAfter(res)
+        }
+      })
+      .catch((err) => {
+        loginLoading.value = false
+        message.error(err?.msg)
+        getImgCode()
+      })
   })
 }
 
@@ -258,12 +265,10 @@ watch([formState.agree, formState.password], () => {
 const imgCodeUrl = ref('')
 const uuid = ref('')
 const getImgCode = () => {
-  fetch('http://vue.ruoyi.vip/prod-api/captchaImage')
-    .then((res) => res.json())
-    .then((res) => {
-      imgCodeUrl.value = `data:image/gif;base64,${res.img}`
-      uuid.value = res.uuid
-    })
+  commonService.getCaptchaImage().then((res) => {
+    imgCodeUrl.value = `data:image/gif;base64,${res.img}`
+    uuid.value = res.uuid
+  })
 }
 onMounted(() => {
   getImgCode()
@@ -286,7 +291,6 @@ defineExpose({
   height: 100%;
   background-image: url('../assets/loginBanner.png');
   background-size: cover;
-  background-position: 0 -60px;
   min-width: 1366px;
   min-height: 756px;
   position: relative;
@@ -296,17 +300,32 @@ defineExpose({
   }
   .login-form {
     position: absolute;
-    left: 60%;
-    top: 25vh;
-    width: 25%;
+    background: #fff;
+    padding: 30px 80px;
+    border-radius: 16px;
+    right: 180px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 540px;
+
+    &::after {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      bottom: -40px;
+      display: block;
+      content: '日新月异公司 版权所有 ICP备: 系统版本号V1.0';
+      color: #fff;
+      text-align: center;
+    }
   }
 }
 
 .login-tab {
-  font-size: 14px;
+  font-size: 20px;
   color: #6e7da6;
   cursor: pointer;
-  margin-right: 10px;
 }
 
 .loginActiveTab {

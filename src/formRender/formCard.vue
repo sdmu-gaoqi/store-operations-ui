@@ -1,6 +1,7 @@
 <template>
   <ThemeProvider>
     <Card :title="props.title" class="shadow op-ui-form-card">
+      <!-- <Spin :spinning="$props.loading" :style="{ height: '100%' }"> -->
       <template v-if="!props.hiddenDesc" #extra
         ><div class="flex items-center">
           <template v-if="isEmpty(props.desc)">
@@ -28,17 +29,18 @@
           }}</Button
         >
         <Button
-          v-if="props?.footer?.cancel"
+          v-if="props?.footer?.submit"
           type="primary"
           class="w-[120px]"
           :on-click="() => debounce(onSubmit)"
           >{{
-            typeof props?.footer?.cancel === 'string'
-              ? props.footer?.cancel
+            typeof props?.footer?.submit === 'string'
+              ? props.footer?.submit
               : '确认'
           }}</Button
         >
       </div>
+      <!-- </Spin> -->
     </Card>
   </ThemeProvider>
 </template>
@@ -59,6 +61,7 @@ export interface FormCardProps {
   }
   onCancel?: () => void
   onSubmit?: () => void
+  loading?: boolean
 }
 const props = defineProps<FormCardProps>()
 const onCancel = () => {

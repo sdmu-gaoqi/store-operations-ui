@@ -37,7 +37,7 @@ const schema = {
   title: '员工列表',
   form: {
     search: true,
-    export: true,
+    export: false,
     reset: true,
     fields: [
       {

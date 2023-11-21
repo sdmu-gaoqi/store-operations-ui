@@ -7,16 +7,19 @@
       name="basic"
       ref="formRef"
       :rules="schema.rules"
-      :on-fields-change="props.onFieldsChanged"
     >
       <div class="op-ui-form-render-body">
         <div
           class="wa-form-render"
           :style="{ width: props.schema.width || 'auto', margin: 'auto' }"
         >
-          <Row class="w-[100%]">
-            <template v-if="schema" v-for="[key, item] in schemaProperties">
-              <Col v-if="!key.startsWith('op-group')" :span="24 / column">
+          <Row class="w-[100%]" v-if="schema">
+            <template v-for="([key, item], sIndex) in schemaProperties">
+              <Col
+                v-if="!key.startsWith('op-group') && uiShowHidden(item)"
+                :span="item?.span ? item.span : 24 / column"
+                v-bind:key="sIndex"
+              >
                 <Form.Item
                   :class="joinCss('wa-form-render', ['row'])"
                   :extra="item.extra || ''"
@@ -28,9 +31,51 @@
                       <QuestionCircleOutlined class="ml-[5px]" />
                     </Tooltip>
                   </template>
+                  <!-- :options="
+                      isEmpty(searchOptions?.[key])
+                        ? item?.props?.options || []
+                        : searchOptions?.[key]
+                    " -->
+                  <Select
+                    v-if="item.widget === 'searchSelect'"
+                    :filter-option="false"
+                    :loading="true"
+                    :options="
+                      isEmpty(searchOptions?.[key])
+                        ? item?.props?.options || []
+                        : getOptions(searchOptions?.[key], item)
+                    "
+                    @search="(v) => selectSearch(v, item, key)"
+                    placeholder="请选择"
+                    :mode="item?.props?.mode"
+                    :show-search="true"
+                    @dropdown-visible-change="
+                      (v) => {
+                        if (v) {
+                          selectSearch('', item, key)
+                        }
+                      }
+                    "
+                    :label-in-value="true"
+                    :field-names="{
+                      label: item?.search?.label,
+                      value: item?.search?.value
+                    }"
+                    v-model:value="formState[`${key}-search`]"
+                    @change="
+                      (v, r) => {
+                        formState[key] = r
+                        props.onFieldChange && props.onFieldChange(key, v)
+                      }
+                    "
+                  ></Select>
                   <Input
                     :style="item?.props?.style || {}"
-                    v-if="item.type === 'string' && item.widget === 'input'"
+                    v-if="
+                      item.type === 'string' &&
+                      item.widget === 'input' &&
+                      !item?.props?.options
+                    "
                     :placeholder="item?.props?.placeholder || ''"
                     v-model:value="formState[key]"
                     :maxlength="item?.props?.maxLength || undefined"
@@ -38,11 +83,35 @@
                     :disabled="item.props?.disabled"
                     :readonly="item.props?.readonly ?? false"
                     :bordered="item.props?.bordered ?? true"
+                    :max="item?.props?.max || undefined"
+                    :min="item?.props?.max || undefined"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                   >
                     <template v-if="item.props?.suffix" #suffix>
                       <span>{{ renderSuffix(item.props?.suffix) }}</span>
                     </template></Input
                   >
+                  <AutoComplete
+                    :style="item?.props?.style || {}"
+                    v-if="
+                      item.type === 'string' &&
+                      item.widget === 'input' &&
+                      item?.props?.options
+                    "
+                    :placeholder="item?.props?.placeholder || ''"
+                    v-model:value="formState[key]"
+                    :maxlength="item?.props?.maxLength || undefined"
+                    :type="item?.props?.type ?? 'text'"
+                    :disabled="item.props?.disabled"
+                    :readonly="item.props?.readonly ?? false"
+                    :bordered="item.props?.bordered ?? true"
+                    :options="item?.props?.options"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
+                  ></AutoComplete>
                   <InputNumber
                     :style="item?.props?.style || { width: '100%' }"
                     v-if="item.type === 'number' && item.widget === 'input'"
@@ -51,7 +120,12 @@
                     :maxlength="item?.props?.maxLength || undefined"
                     :type="item?.props?.type ?? 'text'"
                     :max="item?.props?.max || undefined"
+                    :min="item?.props?.max || undefined"
                     :disabled="item.props?.disabled"
+                    :precision="2"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                   >
                     <template v-if="item.props?.suffix" #addonAfter>
                       <span>{{ renderSuffix(item.props?.suffix) }}</span>
@@ -66,6 +140,9 @@
                     :disabled="item.props?.disabled"
                     :allow-clear="true"
                     :show-search="true"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                   ></Select>
                   <Select
                     :placeholder="item?.props?.placeholder || ''"
@@ -77,6 +154,9 @@
                     :disabled="item.props?.disabled"
                     :allow-clear="true"
                     :show-search="true"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                   ></Select>
                   <Input.TextArea
                     v-if="item.widget === 'textArea'"
@@ -84,15 +164,22 @@
                     v-model:value="formState[key]"
                     :style="item?.props?.style || {}"
                     :disabled="item.props?.disabled"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                   ></Input.TextArea>
                   <RadioGroup
                     v-if="item.widget === 'radio'"
                     v-model:value="formState[key]"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                   >
                     <Radio
                       :value="radioItem?.value"
                       :style="item?.props?.style || {}"
-                      v-for="radioItem in item.props?.options"
+                      v-bind:key="radioIndex"
+                      v-for="(radioItem, radioIndex) in item.props?.options"
                       :disabled="item.props?.disabled"
                       >{{ radioItem?.label }}</Radio
                     ></RadioGroup
@@ -102,6 +189,9 @@
                       ['datePicker', 'timePicker'].includes(
                         item.widget || ''
                       ) && item.type === 'string'
+                    "
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
                     "
                     :placeholder="item?.props?.placeholder || ''"
                     :showTime="item?.props?.showTime"
@@ -134,6 +224,9 @@
                     :placeholder="
                       item?.props?.placeholder || ['开始时间', '结束时间']
                     "
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                     :showTime="item?.props?.showTime"
                     v-model:value="formState[key]"
                     :picker="item?.picker || item?.format || 'date'"
@@ -160,6 +253,9 @@
                     v-model:checked="formState[key]"
                     :style="item?.props?.style || {}"
                     :disabled="item.props?.disabled"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                   >
                   </Switch>
                   <CheckboxGroup
@@ -169,6 +265,9 @@
                     v-model:value="formState[key]"
                     :style="item?.props?.style || {}"
                     :disabled="item.props?.disabled"
+                    @change="
+                      (v) => props.onFieldChange && props.onFieldChange(key, v)
+                    "
                   ></CheckboxGroup>
                   <Rate
                     v-if="item.widget === 'rate'"
@@ -182,13 +281,19 @@
                   <Table
                     v-if="item.widget === 'table'"
                     :columns="item.props?.columns"
-                    :data-source="item.props?.dataSource"
+                    :data-source="
+                      item.props?.dataSource || formState?.[key] || []
+                    "
                     :scroll="item.props?.scroll"
                     :pagination="item.props?.pagination"
                   />
                 </Form.Item>
               </Col>
-              <Col :span="24" v-if="key.startsWith('op-group')">
+              <Col
+                :span="24"
+                v-if="key.startsWith('op-group')"
+                v-bind:key="sIndex"
+              >
                 <div class="flex items-center text-[16px] pb-[16px]">
                   <Classify
                     class="fill-primary w-[16px] h-[16px] mr-[10px]"
@@ -237,6 +342,7 @@
           class="ml-[20px] w-[120px]"
           type="primary"
           @click="onSubmit"
+          :loading="loading"
         >
           {{
             typeof footerOptions?.submit === 'string'
@@ -250,8 +356,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRaw, toRef } from 'vue'
-import { joinCss } from 'wa-utils'
+import { computed, ref, toRaw, toRef, watch } from 'vue'
+import { debounce, isEqual, joinCss } from 'wa-utils'
+// @ts-ignore
 import {
   Form,
   Input,
@@ -268,13 +375,45 @@ import {
   RadioGroup,
   Rate,
   Tooltip,
-  Table
+  Table,
+  AutoComplete
 } from 'ant-design-vue'
+// @ts-ignore
 import ThemeProvider from '../themeProvider/themeProvider.vue'
-import { FormRenderProps } from './type'
+import { FormRenderProps, SchemaBase } from './type'
 import { QuestionCircleOutlined } from '@ant-design/icons-vue'
 import { renderSuffix } from './utils'
 import Classify from '@/assets/classify.svg'
+import { isEmpty } from 'wa-utils'
+
+const getOptions = (options: any, item: any) => {
+  const valueKey = item?.search?.value
+  return [...options, ...(item?.props?.options || [])].reduce(
+    (result: any[], item: any) => {
+      const has = result.some((i) => i?.[valueKey] == item?.[valueKey])
+      if (has) {
+        return result
+      } else {
+        return [...result, item]
+      }
+    },
+    []
+  )
+}
+
+const selectSearch = debounce((v: any, item: any, key: any) => {
+  item?.search
+    ?.request({ [item?.search?.key]: v, pageSize: 10, pageNum: 1 })
+    .then((res: any) => {
+      searchOptions.value = {
+        ...searchOptions.value,
+        [key]: res?.[item?.search?.dataKey]
+      }
+    })
+}, 500)
+
+const loading = ref(false)
+const searchOptions = ref<any>({})
 
 const slot = defineSlots()
 const props = defineProps<FormRenderProps>()
@@ -285,7 +424,9 @@ const column = computed(() => {
 })
 const formState = ref<Record<string, any>>({})
 const formRef = ref()
-const schemaProperties = Object.entries(schema?.value?.properties || {})
+const schemaProperties: [string, Partial<SchemaBase>][] = Object.entries(
+  schema?.value?.properties || {}
+)
 
 schemaProperties.forEach(([key, value]) => {
   formState.value[key] = value?.defaultValue || undefined
@@ -321,15 +462,25 @@ const getFormat = (
   }
 }
 const onSubmit = () => {
+  loading.value = true
   formRef.value
     .validate()
-    .then(() => {
+    .then(async () => {
+      const formStateValue = toRaw(formState.value)
+      Object.keys(formStateValue).forEach((item) => {
+        if (item.startsWith('占位') || item.startsWith('op-group')) {
+          delete formStateValue[item]
+        }
+      })
       if (props.onFinish) {
-        props.onFinish(toRaw(formState.value))
+        await props.onFinish(formStateValue)
+        loading.value = false
+      } else {
+        loading.value = false
       }
     })
-    .catch((error: any) => {
-      console.log(error)
+    .catch(() => {
+      loading.value = false
       formRef.value.scrollToField('code')
     })
 }
@@ -341,8 +492,31 @@ const cancel = () => {
     props.onCancel()
   }
 }
+const uiShowHidden = (item: Partial<SchemaBase>) => {
+  if (isEqual(item?.['ui:hidden'], false)) {
+    return false
+  } else if (typeof item?.['ui:hidden'] == 'string') {
+    const hiddenFn = !eval(item?.['ui:hidden'])
+    return hiddenFn
+  }
+  return true
+}
+const changeState = (data: any) => {
+  Object.keys(data).forEach((item) => {
+    formState.value[item] = data?.[item]
+  })
+}
+watch(formState.value, (preState: any, nextState: any) => {
+  if (props.onFieldsChanged) {
+    props.onFieldsChanged(toRaw(formState.value), {
+      preState,
+      nextState
+    })
+  }
+})
 defineExpose({
-  formRef
+  formRef,
+  changeState
 })
 </script>
 
