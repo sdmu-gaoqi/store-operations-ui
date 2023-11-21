@@ -2,7 +2,7 @@
 
 ## TableRender Demo
 
-<TableRender :schema="schema" v-model:activeKey="activeKey">
+<TableRender :schema="schema" v-model:activeKey="activeKey" :request="(value) => console.log(value)">
 <template v-slot:formButton><div>自定义按钮</div></template>
 <template #bodyCell="{data}">
 {{data.text}}
@@ -30,11 +30,13 @@ export default defineComponent({
 <script lang="ts" setup>
 import { TableRender } from '../../src/index'
 import { ref } from 'vue'
+import { Common } from 'store-request'
 
 const activeKey = ref('')
 
 const schema = {
   title: '员工列表',
+  tabKey: 'hh',
   form: {
     search: true,
     export: false,

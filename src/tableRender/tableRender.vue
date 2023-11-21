@@ -12,7 +12,12 @@
         type="card"
         v-if="realTabs.length > 1"
         :active-key="props.activeKey"
-        v-on:change="(key) => emit('update:activeKey', key)"
+        v-on:change="
+          (key) => {
+            emit('update:activeKey', key)
+            changeTab(key)
+          }
+        "
       >
         <TabPane v-for="i in realTabs" :key="i.key" :tab="i.title">
           <Table
@@ -122,7 +127,14 @@ const {
   loading,
   data: listData,
   params
-} = useRequest<CommonResponse<ListResponse>>(props.request)
+} = useRequest<CommonResponse<ListResponse>>((p: any) =>
+  props.request({
+    ...(props.schema?.tabKey && {
+      [props.schema?.tabKey]: props?.schema?.tabs?.[0]?.key
+    }),
+    ...(p || {})
+  })
+)
 
 const realSchema = schema?.value ? schema : toRef(defaultSchema)
 const realTabs = computed(() => {
@@ -151,6 +163,13 @@ const changePage = (value: TablePaginationConfig) => {
     ...lastParam,
     pageNum: value.current,
     pageSize: value.pageSize
+  })
+}
+
+const changeTab = (v: any) => {
+  run({
+    pageNum: 1,
+    [props?.schema?.tabKey || 'tab']: v
   })
 }
 

@@ -26,6 +26,7 @@ export type TableField = Record<string, any> & {
 
 export type Schema = {
   title: string
+  tabKey?: string
   form: {
     search?: boolean
     export?: boolean
