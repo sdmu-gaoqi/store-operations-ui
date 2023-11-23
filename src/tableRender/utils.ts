@@ -1,7 +1,8 @@
-import { cloneDeep, toThousands } from 'wa-utils'
+import { cloneDeep } from 'wa-utils'
 import type { ColumnItem, OptionItem } from './typing'
 // @ts-ignore
 import dayjs from 'dayjs'
+import { formatMoney } from '@/utils'
 
 interface FormatParams {
   columns: any[]
@@ -10,7 +11,7 @@ interface FormatParams {
 
 export const formatColumn = ({ column, val }: { column: any; val: any }) => {
   if (column.format === 'money') {
-    return toThousands(val.text)
+    return formatMoney(val.text)
   }
   if (column.format === 'time') {
     return val.text ? dayjs(val.text).format('YYYY-MM-DD HH:mm:ss') : ''
@@ -36,7 +37,7 @@ export const formatColumns = ({ columns = [], options = {} }: FormatParams) => {
     const newItem = cloneDeep(item)
     if (item.format === 'money') {
       newItem.customRender = (val: any) => {
-        return toThousands(val.text)
+        return formatMoney(val.text)
       }
     }
     if (item.format === 'time') {

@@ -122,7 +122,7 @@
                     :max="item?.props?.max || undefined"
                     :min="item?.props?.max || undefined"
                     :disabled="item.props?.disabled"
-                    :precision="2"
+                    :precision="item.props?.precision ?? 2"
                     @change="
                       (v) => props.onFieldChange && props.onFieldChange(key, v)
                     "
@@ -291,7 +291,7 @@
               </Col>
               <Col
                 :span="24"
-                v-if="key.startsWith('op-group')"
+                v-if="key.startsWith('op-group') && uiShowHidden(item)"
                 v-bind:key="sIndex"
               >
                 <div class="flex items-center text-[16px] pb-[16px]">
