@@ -55,7 +55,7 @@ const schema = {
         key: 'name'
       },
       {
-        type: 'search',
+        type: 'date',
         label: '手机号码',
         placeholder: '手机号码',
         key: 'phone'
