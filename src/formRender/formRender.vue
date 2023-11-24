@@ -214,6 +214,7 @@
                     "
                     :picker="item?.picker || item?.format || 'date'"
                     :showNow="item?.props?.showNow || false"
+                    :locale="locale"
                   ></DatePicker>
                   <RangePicker
                     v-if="
@@ -246,6 +247,7 @@
                         item.props?.showSecond ?? true
                       )
                     "
+                    :locale="locale"
                   ></RangePicker>
                   <Switch
                     v-if="item.widget === 'switch'"
@@ -385,6 +387,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons-vue'
 import { renderSuffix } from './utils'
 import Classify from '@/assets/classify.svg'
 import { isEmpty } from 'wa-utils'
+import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 
 const getOptions = (options: any, item: any) => {
   const valueKey = item?.search?.value

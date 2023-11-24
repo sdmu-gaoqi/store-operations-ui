@@ -12,12 +12,14 @@
             :placeholder="i.placeholder || i.label"
             v-model:value="formState[i.key]"
             class="w-[100%]"
+            :allow-clear="true"
           ></Input>
           <DatePicker
             v-if="i.type === 'date'"
             :show-time="i.format === 'dateTime'"
             :placeholder="i.placeholder || i.label"
             v-model:value="formState[i.key]"
+            :locale="locale"
             class="w-[100%]"
             :picker="
               ['week', 'month', 'quarter', 'year'].includes(i.format)
@@ -31,6 +33,7 @@
             :show-time="i.format === 'dateTime'"
             v-model:value="formState[i.key]"
             class="w-[100%]"
+            :locale="locale"
             :picker="
               ['week', 'month', 'quarter', 'year'].includes(i.format)
                 ? i.format
@@ -44,6 +47,7 @@
             v-model:value="formState[i.key]"
             class="w-[100%]"
             show-search
+            :allow-clear="true"
           ></Select>
         </Form.Item>
       </Col>
@@ -76,6 +80,7 @@
 
 <script lang="ts" setup>
 import { toRef, toRefs, ref, reactive } from 'vue'
+import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 import {
   Button,
   Col,
@@ -86,7 +91,7 @@ import {
   Select
 } from 'ant-design-vue'
 
-const colClass = 'w-[300px]'
+const colClass = 'w-[360px]'
 
 const formRef = ref()
 
@@ -146,8 +151,16 @@ const getFormValue = async () => {
       } else if (target.type === 'range') {
         let dateFormat = 'YYYY-MM-DD'
         if (target.format === 'timestamp') {
-          value[keys?.[0]] = +new Date(res[k]?.[0])
-          value[keys?.[1]] = +new Date(res[k]?.[1])
+          const date1 = new Date(res[k]?.[0])
+          date1.setHours(0)
+          date1.setMinutes(0)
+          date1.setSeconds(0)
+          const date2 = new Date(res[k]?.[1])
+          date2.setHours(23)
+          date2.setMinutes(59)
+          date2.setSeconds(59)
+          value[keys?.[0]] = +date1
+          value[keys?.[1]] = +date2
         } else if (target.format === 'month') {
           dateFormat === 'YYYY-MM'
         } else if (target.format === 'year') {
