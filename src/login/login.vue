@@ -63,22 +63,6 @@
               >
             </Input.Password></Form.Item
           >
-          <Form.Item v-bind="validateInfos.imgCode" name="imgCode">
-            <Input
-              :label="'请输入验证码'"
-              class="login-input"
-              v-model:value="formState.imgCode"
-              size="large"
-              placeholder="请输入验证码"
-            >
-              <template #suffix> </template>
-              >
-            </Input>
-            <img
-              :src="imgCodeUrl"
-              @click="getImgCode"
-              class="min-w-[100px] absolute top-0 z-10 right-0 h-[40px] cursor-pointer"
-          /></Form.Item>
           <div class="flex justify-between items-center pt-[10px]">
             <Form.Item
               v-show="loginType === 'userName'"
@@ -138,17 +122,13 @@ const props = defineProps({
 interface FormState {
   account: string
   password: string
-  code: string
   agree: boolean
-  imgCode: string
 }
 
 const formState = reactive<FormState>({
   account: 'admin',
   password: 'admin123',
-  code: '',
-  agree: true,
-  imgCode: ''
+  agree: true
 })
 
 const accountConfigs = {
@@ -184,13 +164,6 @@ const rulesRef = computed(() => ({
     {
       required: true,
       message: configs.value.passwordPlaceholder
-    }
-  ],
-  code: [
-    {
-      required: true,
-      message: configs.value.passwordPlaceholder,
-      type: 'array'
     }
   ]
 }))
@@ -232,12 +205,11 @@ const changeLoginTye = (type: 'userName' | 'phone') => {
 }
 
 const onFinish = () => {
-  validate(['account', 'password', 'imgCode']).then((value) => {
+  validate(['account', 'password']).then((value) => {
     userService
       .login({
         username: value.account,
         password: value.password,
-        code: value.imgCode,
         uuid: uuid.value
       })
       .then((res) => {
