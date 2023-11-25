@@ -50,7 +50,7 @@
                         : getOptions(searchOptions?.[key], item)
                     "
                     @search="(v) => selectSearch(v, item, key)"
-                    placeholder="请选择"
+                    :placeholder="item?.placeholder || '请选择'"
                     :mode="item?.props?.mode"
                     :show-search="true"
                     @dropdown-visible-change="
