@@ -54,11 +54,17 @@ const editSchema = {
       title: '查找会员',
       type: 'string',
       search: {
-        key: 'memberName',
+        key: 'phone',
         label: 'memberName',
         value: 'memberId',
         request: member.list,
-        dataKey: 'rows'
+        dataKey: 'rows',
+        format: (v) => {
+          return v?.map(item => ({
+            ...item,
+            memberName: `${item?.memberName}(${item?.memberNo}-${item?.phone})`
+          }))
+        }
       },
       props: {
         options: [ { memberName: 'hh', memberId: 'hh', hidden: true } ]

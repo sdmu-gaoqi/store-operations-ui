@@ -80,6 +80,7 @@ export interface SchemaBase {
     value?: string // value字段
     request: any // 请求
     dataKey: string // 渲染的data
+    format?: any
   }
 }
 export type Schema = Partial<SchemaBase>
