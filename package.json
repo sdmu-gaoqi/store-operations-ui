@@ -1,7 +1,7 @@
 {
   "name": "store-operations-ui",
   "description": "vue 组件库",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "type": "module",
   "main": "./dist/index.d.ts",
   "module": "./dist/store-operations-ui.es.js",

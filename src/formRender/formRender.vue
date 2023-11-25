@@ -43,6 +43,10 @@
                     :options="
                       isEmpty(searchOptions?.[key])
                         ? item?.props?.options || []
+                        : item?.search?.format
+                        ? item?.search?.format(
+                            toRaw(getOptions(searchOptions?.[key], item))
+                          )
                         : getOptions(searchOptions?.[key], item)
                     "
                     @search="(v) => selectSearch(v, item, key)"
