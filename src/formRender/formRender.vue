@@ -19,6 +19,7 @@
                 v-if="!key.startsWith('op-group') && uiShowHidden(item)"
                 :span="item?.span ? item.span : 24 / column"
                 v-bind:key="sIndex"
+                :style="item?.colStyle"
               >
                 <Form.Item
                   :class="joinCss('wa-form-render', ['row'])"
@@ -36,6 +37,20 @@
                         ? item?.props?.options || []
                         : searchOptions?.[key]
                     " -->
+                  <TreeSelect
+                    v-if="item.widget === 'treeSelect'"
+                    :allow-clear="item?.props?.allowClear || true"
+                    :tree-default-expand-all="
+                      item?.props?.treeDefaultExpandAll || false
+                    "
+                    :tree-data="item?.props?.treeData"
+                    :field-names="item?.props?.fieldNames"
+                    :placeholder="item?.props?.placeholder"
+                    :title="item?.props?.title"
+                    :label-in-value="item?.props?.labelInValue"
+                    :multiple="item?.props?.multiple"
+                    v-model:value="formState[key]"
+                  />
                   <Select
                     v-if="item.widget === 'searchSelect'"
                     :filter-option="false"
@@ -369,6 +384,7 @@ import {
   Form,
   Input,
   Select,
+  TreeSelect,
   Row,
   Col,
   InputNumber,
