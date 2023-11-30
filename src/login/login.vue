@@ -19,14 +19,14 @@
                 @click="() => changeLoginTye('userName')"
                 >账号登录</span
               >
-              <div class="w-[1px] h-[16px] bg-slate-600 mx-[20px]" />
-              <span
+              <!-- <div class="w-[1px] h-[16px] bg-slate-600 mx-[20px]" /> -->
+              <!-- <span
                 :class="`login-tab ${
                   loginType === 'phone' && ' loginActiveTab'
                 }`"
                 @click="() => changeLoginTye('phone')"
                 >手机号登陆</span
-              >
+              > -->
             </div>
           </div>
           <Form.Item v-bind="validateInfos.account" name="account">
@@ -34,6 +34,7 @@
               :label="configs.namePlaceholder"
               class="login-input"
               v-model:value="formState.account"
+              placeholder="请输入用户名"
               size="large"
             >
               <template #prefix> <user-outlined /> </template>
@@ -45,6 +46,7 @@
               :label="configs.passwordPlaceholder"
               class="login-input"
               type="password"
+              placeholder="请输入密码"
               v-model:value="formState.password"
               size="large"
             >
@@ -126,8 +128,8 @@ interface FormState {
 }
 
 const formState = reactive<FormState>({
-  account: 'admin',
-  password: 'admin123',
+  account: '',
+  password: '',
   agree: true
 })
 
@@ -307,5 +309,14 @@ defineExpose({
 .login-input {
   border-radius: 6px;
   width: 100%;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-transition-delay: 99999s;
+  -webkit-transition:
+    color 99999s ease-out,
+    background-color 99999s ease-out;
 }
 </style>
