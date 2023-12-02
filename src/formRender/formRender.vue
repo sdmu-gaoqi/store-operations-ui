@@ -330,7 +330,7 @@
         </div>
       </div>
       <div
-        class="wa-form-footer flex-shrink-0 h-[60px] flex justify-end items-center px-[50px] bg-[#f5f5f5] bottom-0 w-[100%]"
+        class="wa-form-footer flex-shrink-0 h-[60px] flex justify-center items-center px-[50px] bg-[#f5f5f5] bottom-0 w-[100%]"
       >
         <Button
           v-if="footerOptions?.cancel"

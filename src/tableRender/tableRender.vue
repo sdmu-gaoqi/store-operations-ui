@@ -31,11 +31,14 @@
             :bordered="true"
             :loading="loading"
             :on-change="changePage"
-            :pagination="{
-              current: listData?.current,
-              pageSize: listData?.pageSize,
-              total: listData?.total
-            }"
+            :pagination="
+              tableProps?.pagination ?? {
+                current: listData?.current,
+                pageSize: listData?.pageSize,
+                total: listData?.total,
+                showTotal: (total) => `共${total}条`
+              }
+            "
           >
             <slot.default v-if="slot.default"></slot.default>
             <template #bodyCell="data" v-if="slot.bodyCell">
@@ -63,11 +66,14 @@
         :bordered="true"
         :loading="loading"
         :on-change="changePage"
-        :pagination="{
-          current: listData?.current,
-          pageSize: listData?.pageSize,
-          total: listData?.total
-        }"
+        :pagination="
+          tableProps?.pagination ?? {
+            current: listData?.current,
+            pageSize: listData?.pageSize,
+            total: listData?.total,
+            showTotal: (total) => `共${total}条`
+          }
+        "
       >
         <template #bodyCell="data" v-if="slot.bodyCell">
           <slot.bodyCell
@@ -167,7 +173,9 @@ const changePage = (value: TablePaginationConfig) => {
 }
 
 const changeTab = (v: any) => {
+  const lastParam = params?.value ? (params?.value?.[0] as {}) : {}
   run({
+    ...lastParam,
     pageNum: 1,
     [props?.schema?.tabKey || 'tab']: v
   })

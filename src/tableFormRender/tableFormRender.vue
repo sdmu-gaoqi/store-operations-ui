@@ -51,7 +51,7 @@
           ></Select>
         </Form.Item>
       </Col>
-      <div class="pl-[110px]">
+      <div class="pl-[60px] ml-auto">
         <Button
           v-if="form && form.search"
           class="opui-form-button bg-primary"
