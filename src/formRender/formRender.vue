@@ -25,6 +25,9 @@
                   ...(!uiShowHidden(item) && {
                     height: 0,
                     overflow: 'hidden'
+                  }),
+                  ...(key?.includes('占位') && {
+                    height: 0
                   })
                 }"
               >
