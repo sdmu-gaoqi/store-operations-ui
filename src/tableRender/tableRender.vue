@@ -164,6 +164,9 @@ const formChange = (value: Parameters<typeof onSearch>[0]) => {
 }
 
 const changePage = (value: TablePaginationConfig) => {
+  if (!listData.value?.rows) {
+    return
+  }
   const lastParam = params?.value ? (params?.value?.[0] as {}) : {}
   run({
     ...lastParam,

@@ -19,12 +19,26 @@
                 v-if="!key.startsWith('op-group') && uiShowHidden(item)"
                 :span="item?.span ? item.span : 24 / column"
                 v-bind:key="sIndex"
-                :style="item?.colStyle"
+                :class="item?.colClass"
+                :style="{
+                  ...(item?.colStyle || {}),
+                  ...(!uiShowHidden(item) && {
+                    height: 0,
+                    overflow: 'hidden'
+                  })
+                }"
               >
                 <Form.Item
                   :class="joinCss('wa-form-render', ['row'])"
                   :extra="item.extra || ''"
                   :name="key"
+                  :style="{
+                    ...(!uiShowHidden(item) && {
+                      height: 0,
+                      margin: 0,
+                      overflow: 'hidden'
+                    })
+                  }"
                 >
                   <template #label v-if="item.title">
                     <span>{{ item.title || '' }}</span>
@@ -139,7 +153,7 @@
                     :maxlength="item?.props?.maxLength || undefined"
                     :type="item?.props?.type ?? 'text'"
                     :max="item?.props?.max || undefined"
-                    :min="item?.props?.max || undefined"
+                    :min="item?.props?.min ?? undefined"
                     :disabled="item.props?.disabled"
                     :precision="item.props?.precision ?? 2"
                     @change="

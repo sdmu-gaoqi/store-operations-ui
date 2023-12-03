@@ -49,6 +49,7 @@ export interface SchemaBase {
   column?: number
   className?: string
   widget?: string
+  colClass?: string
   readOnlyWidget?: string
   extra?: string
   properties?: Record<string, Schema>
