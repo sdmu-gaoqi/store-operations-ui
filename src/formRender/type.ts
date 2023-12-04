@@ -95,4 +95,5 @@ export type FormRenderProps = {
     data: { preState: any; nextState: any }
   ) => void
   onFieldChange?: (key: any, value: any) => void
+  loading?: boolean
 }
