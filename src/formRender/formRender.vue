@@ -18,7 +18,11 @@
               <template v-for="([key, item], sIndex) in schemaProperties">
                 <Col
                   v-if="!key.startsWith('op-group') && uiShowHidden(item)"
-                  :span="item?.span ? item.span : 24 / column"
+                  :span="
+                    item?.span || typeof item.span == 'number'
+                      ? item.span
+                      : 24 / column
+                  "
                   v-bind:key="sIndex"
                   :class="item?.colClass"
                   :style="{
@@ -72,7 +76,6 @@
                     <Select
                       v-if="item.widget === 'searchSelect'"
                       :filter-option="false"
-                      :loading="true"
                       :options="
                         isEmpty(searchOptions?.[key])
                           ? item?.props?.options || []
@@ -86,13 +89,6 @@
                       :placeholder="item?.placeholder || '请选择'"
                       :mode="item?.props?.mode"
                       :show-search="true"
-                      @dropdown-visible-change="
-                        (v) => {
-                          if (v) {
-                            selectSearch('', item, key)
-                          }
-                        }
-                      "
                       :label-in-value="true"
                       :field-names="{
                         label: item?.search?.label,
@@ -457,7 +453,7 @@ const getOptions = (options: any, item: any) => {
 }
 
 const selectSearch = debounce((v: any, item: any, key: any) => {
-  item?.search
+  return item?.search
     ?.request({ [item?.search?.key]: v, pageSize: 10, pageNum: 1 })
     .then((res: any) => {
       searchOptions.value = {
@@ -485,6 +481,9 @@ const schemaProperties: [string, Partial<SchemaBase>][] = Object.entries(
 
 schemaProperties.forEach(([key, value]) => {
   formState.value[key] = value?.defaultValue || undefined
+  if (value?.search) {
+    selectSearch('', value, key)
+  }
 })
 const footerOptions = computed(() => {
   return {
