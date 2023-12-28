@@ -198,7 +198,6 @@ defineExpose({
 
 <style lang="scss">
 .soui-tabs {
-  user-select: none;
   .ant-tabs-tab.ant-tabs-tab-active {
     @apply bg-primary;
     .ant-tabs-tab-btn {
