@@ -54,7 +54,6 @@
     "autoprefixer": "^10.4.15",
     "babel-eslint": "^10.1.0",
     "child_process": "^1.0.2",
-    "store-request": "^0.0.6",
     "dayjs": "^1.11.10",
     "eslint-plugin-import": "^2.28.0",
     "path": "^0.12.7",

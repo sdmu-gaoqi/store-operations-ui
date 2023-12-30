@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, toRef, toRefs } from 'vue'
+import { computed, onMounted, toRaw, toRef, toRefs } from 'vue'
 import { schema as defaultSchema } from './templete'
 import {
   Card,
@@ -134,12 +134,23 @@ const {
   data: listData,
   params
 } = useRequest<CommonResponse<ListResponse>>((p: any) =>
-  props.request({
-    ...(props.schema?.tabKey && {
-      [props.schema?.tabKey]: props?.schema?.tabs?.[0]?.key
-    }),
-    ...(p || {})
-  })
+  props
+    .request({
+      ...(props.schema?.tabKey && {
+        [props.schema?.tabKey]: props?.schema?.tabs?.[0]?.key
+      }),
+      ...(p || {})
+    })
+    .then((res) => {
+      const p: any = {
+        current: (toRaw(params.value)?.[0] as any)?.pageNum || 1,
+        pageSize: (toRaw(params.value)?.[0] as any)?.pageSize || 10
+      }
+      return {
+        ...res,
+        ...p
+      }
+    })
 )
 
 const realSchema = schema?.value ? schema : toRef(defaultSchema)
