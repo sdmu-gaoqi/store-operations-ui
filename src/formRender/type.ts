@@ -98,4 +98,5 @@ export type FormRenderProps = {
   loading?: boolean
   className?: string
   bodyClassName?: string
+  rowClassName?: string
 }

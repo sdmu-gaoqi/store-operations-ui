@@ -17,7 +17,7 @@
             <template v-if="slot.left">
               <slot.left></slot.left>
             </template>
-            <Row class="w-[100%]" v-if="schema">
+            <Row :class="`w-[100%] ${props.rowClassName}`" v-if="schema">
               <template v-for="([key, item], sIndex) in schemaProperties">
                 <Col
                   v-if="!key.startsWith('op-group') && uiShowHidden(item)"
