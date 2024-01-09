@@ -1,7 +1,6 @@
 import { createRequire } from 'module'
 import { defineConfig } from 'vitepress'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import { resolve } from 'path'
+import { mergeConfig } from '../../vite.config'
 
 const require = createRequire(import.meta.url)
 const pkg = require('vitepress/package.json')
@@ -21,25 +20,7 @@ export default defineConfig({
     }
   },
 
-  vite: {
-    plugins: [vueJsx()],
-    resolve: {
-      alias: {
-        '@': resolve(__dirname, '../../src'),
-        hooks: resolve(__dirname, '../../src/hooks'),
-        styles: resolve(__dirname, '../../src/styles'),
-        pages: resolve(__dirname, '../../src/pages'),
-        components: resolve(__dirname, '../../src/components')
-      }
-    },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@import "../../src/styles/main.scss";'
-        }
-      }
-    }
-  },
+  vite: mergeConfig,
 
   head: [
     ['meta', { name: 'theme-color', content: '#3c8772' }],
@@ -111,13 +92,7 @@ function sidebarGuide() {
     {
       text: 'Base',
       collapsed: false,
-      items: [
-        { text: 'Input', link: '/components/input' },
-        { text: 'AddressSelect', link: '/components/addressSelect' },
-        { text: 'Login', link: '/components/login' },
-        { text: 'TableRender', link: '/components/tableRender' },
-        { text: 'FormRender', link: '/components/formRender' }
-      ]
+      items: [{ text: 'AddressSelect', link: '/components/addressSelect' }]
     }
   ]
 }

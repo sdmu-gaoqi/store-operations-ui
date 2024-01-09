@@ -6,8 +6,7 @@ import postCssPxToRem from 'wa-postcss-pxtorem'
 import svgLoader from 'vite-svg-loader'
 import tailwindCss from 'tailwindcss'
 
-// https://vitejs.dev/confi/g
-export default defineConfig({
+export const mergeConfig = {
   plugins: [
     vue(),
     vueJsx(),
@@ -69,4 +68,7 @@ export default defineConfig({
       }
     }
   }
-})
+}
+
+// https://vitejs.dev/confi/g
+export default defineConfig(mergeConfig)
