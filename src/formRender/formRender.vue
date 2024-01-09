@@ -2,18 +2,21 @@
   <ThemeProvider>
     <Spin :spinning="props.loading" wrapperClassName="spin-wrapper">
       <Form
-        class="op-ui-form-render"
+        :class="`op-ui-form-render ${props.className}`"
         :model="formState"
         autocomplete="off"
         name="basic"
         ref="formRef"
         :rules="schema.rules"
       >
-        <div class="op-ui-form-render-body">
+        <div :class="`op-ui-form-render-body ${props.bodyClassName}`">
           <div
             class="wa-form-render"
             :style="{ width: props.schema.width || 'auto', margin: 'auto' }"
           >
+            <template v-if="slot.left">
+              <slot.left></slot.left>
+            </template>
             <Row class="w-[100%]" v-if="schema">
               <template v-for="([key, item], sIndex) in schemaProperties">
                 <Col

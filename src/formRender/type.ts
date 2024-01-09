@@ -96,4 +96,6 @@ export type FormRenderProps = {
   ) => void
   onFieldChange?: (key: any, value: any) => void
   loading?: boolean
+  className?: string
+  bodyClassName?: string
 }
