@@ -9,9 +9,9 @@
         ref="formRef"
         :rules="schema.rules"
       >
-        <div :class="`op-ui-form-render-body ${props.bodyClassName}`">
+        <div class="op-ui-form-render-body">
           <div
-            class="wa-form-render"
+            :class="`wa-form-render ${props.bodyClassName}`"
             :style="{ width: props.schema.width || 'auto', margin: 'auto' }"
           >
             <template v-if="slot.left">
