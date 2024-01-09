@@ -1,6 +1,4 @@
-# Input
-
-## addressSelect
+# wangeditor
 
 <Test label='label' type='password' color="#111" />
 
