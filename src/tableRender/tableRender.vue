@@ -1,6 +1,10 @@
 <template>
   <ThemeProvider>
-    <Card :title="realSchema?.title" :class="joinCss('soui', ['tabs'])">
+    <Card
+      :title="realSchema?.title"
+      :class="joinCss('soui', ['tabs'])"
+      :style="props.cardStyle || {}"
+    >
       <TableFormRender
         :options="schema && schema.options"
         :form="schema && schema.form"
@@ -122,7 +126,8 @@ const props = defineProps({
   onSearch: Function,
   request: Function,
   list: Array,
-  formatParams: Function
+  formatParams: Function,
+  cardStyle: Object
 }) as TableProps
 const { onSearch = () => {} } = props
 

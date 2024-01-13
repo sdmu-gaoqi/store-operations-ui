@@ -20,7 +20,11 @@
             <Row :class="`w-[100%] ${props.rowClassName}`" v-if="schema">
               <template v-for="([key, item], sIndex) in schemaProperties">
                 <Col
-                  v-if="!key.startsWith('op-group') && uiShowHidden(item)"
+                  v-if="
+                    !key.startsWith('op-group') &&
+                    !key.startsWith('op-desc') &&
+                    uiShowHidden(item)
+                  "
                   :span="
                     item?.span || typeof item.span == 'number'
                       ? item.span
@@ -351,6 +355,17 @@
                     {{ item.title }}
                   </div>
                 </Col>
+                <Col
+                  :span="24"
+                  v-if="key.startsWith('op-desc') && uiShowHidden(item)"
+                  v-bind:key="sIndex"
+                >
+                  <div
+                    class="flex items-center text-[12px] px-[20px] pb-[16px] text-zinc-400"
+                  >
+                    {{ item.title }}
+                  </div>
+                </Col>
               </template>
             </Row>
             <template v-if="slot.after">
@@ -525,7 +540,11 @@ const onSubmit = () => {
     .then(async () => {
       const formStateValue = toRaw(formState.value)
       Object.keys(formStateValue).forEach((item) => {
-        if (item.startsWith('占位') || item.startsWith('op-group')) {
+        if (
+          item.startsWith('占位') ||
+          item.startsWith('op-group') ||
+          item.startsWith('op-desc')
+        ) {
           delete formStateValue[item]
         }
       })
