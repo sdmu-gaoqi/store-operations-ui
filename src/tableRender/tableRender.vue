@@ -43,6 +43,8 @@
                 showTotal: (total) => `共${total}条`
               }
             "
+            :row-selection="tableProps?.rowSelection"
+            :row-key="tableProps?.rowKey"
           >
             <slot.default v-if="slot.default"></slot.default>
             <template #bodyCell="data" v-if="slot.bodyCell">
@@ -78,6 +80,8 @@
             showTotal: (total) => `共${total}条`
           }
         "
+        :row-selection="tableProps?.rowSelection"
+        :row-key="tableProps?.rowKey"
       >
         <template #bodyCell="data" v-if="slot.bodyCell">
           <slot.bodyCell

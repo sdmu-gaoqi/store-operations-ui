@@ -56,7 +56,9 @@
                     }"
                   >
                     <template #label v-if="item.title">
-                      <span>{{ item.title || '' }}</span>
+                      <span :class="item.labelClass">{{
+                        item.title || ''
+                      }}</span>
                       <Tooltip v-if="item.tooltip" :title="item.tooltip.title">
                         <QuestionCircleOutlined class="ml-[5px]" />
                       </Tooltip>
