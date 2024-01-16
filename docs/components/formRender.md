@@ -5,11 +5,12 @@
 <FormCard title="新增房间">
   <template #content>
     <FormRender
-      :on-finish="onFinish"
-      :on-cancel="onCancel"
       :schema="editSchema"
       :onFieldsChanged="() => {}"
-    ></FormRender>
+    >
+    <template #table4>
+    <div>this is table4</div></template>
+    </FormRender>
   </template>
 </FormCard>
 
@@ -57,7 +58,7 @@ const editSchema = {
         key: 'phone',
         label: 'memberName',
         value: 'memberId',
-        request: member.list,
+        // request: member.list,
         dataKey: 'rows',
         format: (v) => {
           return v?.map(item => ({
@@ -322,9 +323,9 @@ const editSchema = {
             value: 'B'
           }
         ],
-        mode: 'multiple'
+        mode: 'multiple',
       }
-    }
+    },
   },
   displayType: 'row',
   column: 2,

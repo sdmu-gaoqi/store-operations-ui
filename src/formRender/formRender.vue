@@ -63,6 +63,13 @@
                         <QuestionCircleOutlined class="ml-[5px]" />
                       </Tooltip>
                     </template>
+                    <template v-if="item.slots">
+                      <slot
+                        :name="item.slots.customRender"
+                        :item="item"
+                        :form="formRef"
+                      />
+                    </template>
                     <!-- :options="
                       isEmpty(searchOptions?.[key])
                         ? item?.props?.options || []
