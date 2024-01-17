@@ -63,18 +63,16 @@
                         <QuestionCircleOutlined class="ml-[5px]" />
                       </Tooltip>
                     </template>
-                    <template v-if="item.slots">
+                    <template
+                      v-if="item.slots?.customRender && uiShowHidden(item)"
+                    >
                       <slot
-                        :name="item.slots.customRender"
+                        :name="item.slots?.customRender"
                         :item="item"
                         :form="formRef"
+                        v-if="uiShowHidden(item)"
                       />
                     </template>
-                    <!-- :options="
-                      isEmpty(searchOptions?.[key])
-                        ? item?.props?.options || []
-                        : searchOptions?.[key]
-                    " -->
                     <TreeSelect
                       v-if="item.widget === 'treeSelect'"
                       :allow-clear="item?.props?.allowClear || true"
