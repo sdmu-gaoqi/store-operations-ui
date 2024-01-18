@@ -45,6 +45,7 @@
             "
             :row-selection="tableProps?.rowSelection"
             :row-key="tableProps?.rowKey"
+            :size="tableProps?.size"
           >
             <slot.default v-if="slot.default"></slot.default>
             <template #bodyCell="data" v-if="slot.bodyCell">
@@ -82,6 +83,7 @@
         "
         :row-selection="tableProps?.rowSelection"
         :row-key="tableProps?.rowKey"
+        :size="tableProps?.size"
       >
         <template #bodyCell="data" v-if="slot.bodyCell">
           <slot.bodyCell
