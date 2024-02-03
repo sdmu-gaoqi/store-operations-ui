@@ -312,7 +312,7 @@ input:-webkit-autofill:active {
 .login-desc {
   position: absolute;
   left: 50%;
-  bottom: 1 0px;
+  bottom: 10px;
   transform: translateX(-50%);
   &::after {
     width: 100%;
