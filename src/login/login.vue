@@ -96,6 +96,7 @@
             >
           </Form.Item>
         </Form>
+        <div class="login-desc"></div>
       </div>
     </ThemeProvider>
   </div>
@@ -281,18 +282,6 @@ defineExpose({
     top: 50%;
     transform: translateY(-50%);
     width: 540px;
-
-    &::after {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      bottom: -40px;
-      display: block;
-      content: '日新月异公司 版权所有 ICP备: 系统版本号V1.2.0';
-      color: #fff;
-      text-align: center;
-    }
   }
 }
 
@@ -318,5 +307,19 @@ input:-webkit-autofill:active {
   -webkit-transition:
     color 99999s ease-out,
     background-color 99999s ease-out;
+}
+
+.login-desc {
+  position: absolute;
+  left: 50%;
+  bottom: 1 0px;
+  transform: translateX(-50%);
+  &::after {
+    width: 100%;
+    display: block;
+    content: '日新月异公司 版权所有 ICP备: 系统版本号V1.2.0';
+    color: #fff;
+    text-align: center;
+  }
 }
 </style>
