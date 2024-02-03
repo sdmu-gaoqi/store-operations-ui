@@ -289,7 +289,7 @@ defineExpose({
       width: 100%;
       bottom: -40px;
       display: block;
-      content: '日新月异公司 版权所有 ICP备: 系统版本号V1.0';
+      content: '日新月异公司 版权所有 ICP备: 系统版本号V1.2.0';
       color: #fff;
       text-align: center;
     }

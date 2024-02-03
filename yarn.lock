@@ -1071,11 +1071,6 @@
   resolved "https://registry.npmmirror.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/lodash@^4.14.198":
-  version "4.14.202"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.202.tgz#f09dbd2fb082d507178b2f2a5c7e74bd72ff98f8"
-  integrity sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==
-
 "@types/minimist@^1.2.0", "@types/minimist@^1.2.2":
   version "1.2.2"
   resolved "https://registry.npmmirror.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
@@ -1625,34 +1620,6 @@ ansi-styles@^6.0.0, ansi-styles@^6.1.0:
   version "6.2.1"
   resolved "https://registry.npmmirror.com/ansi-styles/-/ansi-styles-6.2.1.tgz#0e62320cf99c21afff3b3012192546aacbfb05c5"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
-
-ant-design-vue@^4.0.0:
-  version "4.0.7"
-  resolved "https://registry.npmjs.org/ant-design-vue/-/ant-design-vue-4.0.7.tgz#e4ac41853aac7c5d7cc3e0be884effbd90dd34b3"
-  integrity sha512-oHTtc1GZkfENZTkt2aDvjaD4yoRsowYvCOmxA6+5AGqm5uz/datdJOXsq9nokIhC+vrAMhk6JQVFZ2hh7eU6Pw==
-  dependencies:
-    "@ant-design/colors" "^6.0.0"
-    "@ant-design/icons-vue" "^7.0.0"
-    "@babel/runtime" "^7.10.5"
-    "@ctrl/tinycolor" "^3.5.0"
-    "@emotion/hash" "^0.9.0"
-    "@emotion/unitless" "^0.8.0"
-    "@simonwep/pickr" "~1.8.0"
-    array-tree-filter "^2.1.0"
-    async-validator "^4.0.0"
-    csstype "^3.1.1"
-    dayjs "^1.10.5"
-    dom-align "^1.12.1"
-    dom-scroll-into-view "^2.0.0"
-    lodash "^4.17.21"
-    lodash-es "^4.17.15"
-    resize-observer-polyfill "^1.5.1"
-    scroll-into-view-if-needed "^2.2.25"
-    shallow-equal "^1.0.0"
-    stylis "^4.1.3"
-    throttle-debounce "^5.0.0"
-    vue-types "^3.0.0"
-    warning "^4.0.0"
 
 ant-design-vue@^4.0.3:
   version "4.0.3"
@@ -6059,19 +6026,6 @@ stop-iteration-iterator@^1.0.0:
   dependencies:
     internal-slot "^1.0.4"
 
-store-request@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.npmjs.org/store-request/-/store-request-0.0.6.tgz#be4136412638af745a52af9629d7b184aaf4e43f"
-  integrity sha512-KBAPIG5IcqAmhJaY1r8cFsYfspmU6q6JdLxedK27VjJyijFXiRD5CygTWxjvG2TFo0FOhRSHy+6V81W7ReUmLQ==
-  dependencies:
-    "@types/lodash" "^4.14.198"
-    ant-design-vue "^4.0.0"
-    axios "^1.4.0"
-    copy-to-clipboard "^3.3.3"
-    dayjs "^1.11.9"
-    lodash "^4.17.21"
-    wa-utils "^0.2.1"
-
 strict-uri-encode@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/strict-uri-encode/-/strict-uri-encode-2.0.0.tgz#b9c7330c7042862f6b142dc274bbcc5866ce3546"
@@ -6878,22 +6832,6 @@ wa-utils@0.1.6:
   version "0.1.6"
   resolved "https://registry.npmjs.org/wa-utils/-/wa-utils-0.1.6.tgz#c33009a6f249aaaa1560b9dc934e7d5b98513f17"
   integrity sha512-K+qvhhgwDbh0VoERDs92vsnAvpRXPgyv0+jCJeDaVPxyeu7BXhHpYsvyJq0U8ggdN96e7/ZfZlxUMT5O/BnGyw==
-  dependencies:
-    "@types/js-cookie" "^3.0.3"
-    "@types/uuid" "^9.0.2"
-    axios "^1.4.0"
-    copy-to-clipboard "^3.3.3"
-    dayjs "^1.11.9"
-    eventemitter3 "^5.0.1"
-    js-cookie "^3.0.5"
-    lodash "^4.17.21"
-    nanoid "^4.0.2"
-    vconsole "^3.15.1"
-
-wa-utils@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.npmjs.org/wa-utils/-/wa-utils-0.2.1.tgz#9a9bc05d7ab5383b8a77a39ccdc84ebbe2563389"
-  integrity sha512-Cd747+oKDigT0R0Vcfg7yjDfvad5TM6YkaQCISrxfia6KSkxX2e17+opMvkdM/kuE5DvJ5cXVUQ05mqLyGDAuQ==
   dependencies:
     "@types/js-cookie" "^3.0.3"
     "@types/uuid" "^9.0.2"
