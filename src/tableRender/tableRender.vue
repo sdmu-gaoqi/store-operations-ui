@@ -179,9 +179,12 @@ const formChange = (value: Parameters<typeof onSearch>[0]) => {
   if (onSearch) {
     onSearch(value)
   }
-  const params = props.formatParams ? props.formatParams(value) : value
+  const _params = props.formatParams ? props.formatParams(value) : value
+  const oldP = toRaw(params.value)?.[0] || {}
   run({
-    ...params
+    ...oldP,
+    pageNum: 1,
+    ..._params
   })
 }
 
