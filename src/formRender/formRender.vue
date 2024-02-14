@@ -123,7 +123,7 @@
                         item.widget === 'input' &&
                         !item?.props?.options
                       "
-                      :placeholder="item?.props?.placeholder || ''"
+                      :placeholder="item?.props?.placeholder || '请输入'"
                       v-model:value="formState[key]"
                       :maxlength="item?.props?.maxLength || undefined"
                       :type="item?.props?.type ?? 'text'"
@@ -164,7 +164,7 @@
                     <InputNumber
                       :style="item?.props?.style || { width: '100%' }"
                       v-if="item.type === 'number' && item.widget === 'input'"
-                      :placeholder="item?.props?.placeholder || ''"
+                      :placeholder="item?.props?.placeholder || '请输入'"
                       v-model:value="formState[key]"
                       :maxlength="item?.props?.maxLength || undefined"
                       :type="item?.props?.type ?? 'text'"
@@ -182,7 +182,7 @@
                       </template></InputNumber
                     >
                     <Select
-                      :placeholder="item?.props?.placeholder || ''"
+                      :placeholder="item?.props?.placeholder || '请选择'"
                       :options="item?.props?.options || []"
                       :style="item?.props?.style || {}"
                       v-if="['select'].includes(item?.widget || '')"
@@ -196,7 +196,7 @@
                       "
                     ></Select>
                     <Select
-                      :placeholder="item?.props?.placeholder || ''"
+                      :placeholder="item?.props?.placeholder || '请选择'"
                       :options="item?.props?.options || []"
                       mode="multiple"
                       :style="item?.props?.style || {}"
@@ -212,7 +212,7 @@
                     ></Select>
                     <Input.TextArea
                       v-if="item.widget === 'textArea'"
-                      :placeholder="item?.props?.placeholder || ''"
+                      :placeholder="item?.props?.placeholder || '请输入'"
                       v-model:value="formState[key]"
                       :style="item?.props?.style || {}"
                       :disabled="item.props?.disabled"
@@ -248,7 +248,7 @@
                         (v) =>
                           props.onFieldChange && props.onFieldChange(key, v)
                       "
-                      :placeholder="item?.props?.placeholder || ''"
+                      :placeholder="item?.props?.placeholder || '请选择'"
                       :showTime="item?.props?.showTime"
                       :style="item?.props?.style || { width: '50%' }"
                       v-model:value="formState[key]"
