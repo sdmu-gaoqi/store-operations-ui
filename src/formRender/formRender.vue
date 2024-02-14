@@ -123,7 +123,14 @@
                         item.widget === 'input' &&
                         !item?.props?.options
                       "
-                      :placeholder="item?.props?.placeholder || '请输入'"
+                      :placeholder="
+                        item?.props?.placeholder ||
+                        (item.props?.readonly ||
+                        (item.props?.bordered === false &&
+                          typeof item.props.bordered === 'boolean')
+                          ? ''
+                          : '请输入')
+                      "
                       v-model:value="formState[key]"
                       :maxlength="item?.props?.maxLength || undefined"
                       :type="item?.props?.type ?? 'text'"

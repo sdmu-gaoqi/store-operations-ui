@@ -7,6 +7,7 @@
     >
       <TableFormRender
         :options="schema && schema.options"
+        :active-key="props.activeKey"
         :form="schema && schema.form"
         :submit="formChange"
       >
@@ -112,7 +113,7 @@ import {
 } from 'ant-design-vue'
 // @ts-ignore
 import ThemeProvider from '../themeProvider/themeProvider.vue'
-import { joinCss } from 'wa-utils'
+import { cloneDeep, joinCss } from 'wa-utils'
 import { formatColumns, formatColumn } from './utils'
 // @ts-ignore
 import TableFormRender from '../tableFormRender/tableFormRender.vue'
@@ -180,10 +181,14 @@ const formChange = (value: Parameters<typeof onSearch>[0]) => {
     onSearch(value)
   }
   const _params = props.formatParams ? props.formatParams(value) : value
-  const oldP = toRaw(params.value)?.[0] || {}
+  const oldP = cloneDeep(toRaw(params.value)?.[0] || ({} as any))
+  const tabKeys = props?.schema?.tabKey || 'tab'
   run({
-    ...oldP,
     pageNum: 1,
+    ...(tabKeys &&
+      oldP[tabKeys] && {
+        [tabKeys]: oldP[tabKeys]
+      }),
     ..._params
   })
 }
@@ -201,7 +206,18 @@ const changePage = (value: TablePaginationConfig) => {
 }
 
 const changeTab = (v: any) => {
-  const lastParam = params?.value ? (params?.value?.[0] as {}) : {}
+  const lastParam = params?.value ? (params?.value?.[0] as {}) : ({} as any)
+  const hasTabKeys = schema?.value?.form?.fields
+    ?.filter((item: any) => item?.activeKey)
+    ?.map((item: any) => {
+      return item?.names ? item.names : item?.key
+    })
+    ?.flat()
+  if (lastParam) {
+    hasTabKeys.forEach((i: any) => {
+      delete lastParam[i]
+    })
+  }
   run({
     ...lastParam,
     pageNum: 1,
