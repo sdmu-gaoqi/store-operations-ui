@@ -1,6 +1,9 @@
 import './common'
 
 export function formatMoney(value: any) {
+  if (value == '-' || value === '--') {
+    return value
+  }
   if (!value) {
     return '0'
   }
