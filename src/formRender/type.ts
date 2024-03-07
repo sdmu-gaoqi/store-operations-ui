@@ -8,6 +8,8 @@ export type SchemaType =
   | 'date'
   | 'datetime'
   | 'block'
+  | 'upload'
+  | 'uploadMultiple'
   | string
 
 export interface SchemaBase {
@@ -69,12 +71,12 @@ export interface SchemaBase {
   span?: number
   validateTrigger?: string | string[]
   [key: string]: any
-  footer: {
+  footer?: {
     submit?: boolean | string
     reset?: boolean | string
     cancel?: boolean | string
   }
-  'ui:hidden': boolean | string
+  'ui:hidden'?: boolean | string
   search?: {
     key?: string // 搜索的key
     label?: string // label字段,
