@@ -355,9 +355,23 @@
                       :scroll="item.props?.scroll"
                       :pagination="item.props?.pagination"
                     />
+                    <a-image-preview-group
+                      v-if="
+                        item.type === 'uploadMultiple' && item?.props?.readonly
+                      "
+                    >
+                      <a-image
+                        :width="100"
+                        v-for="item in formState[key]"
+                        :key="item?.url"
+                        :src="item?.response?.url || item?.url"
+                      />
+                    </a-image-preview-group>
                     <Upload
                       v-model:file-list="formState[key]"
-                      v-if="item.type === 'uploadMultiple'"
+                      v-if="
+                        item.type === 'uploadMultiple' && !item?.props?.readonly
+                      "
                       :action="item?.props?.uploadProps?.accept?.action"
                       list-type="picture-card"
                       :accept="item?.props?.uploadProps?.accept"
