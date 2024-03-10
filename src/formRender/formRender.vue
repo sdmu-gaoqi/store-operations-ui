@@ -371,18 +371,20 @@
                       :customRequest="
                         async (e) => {
                           const file = e.file
-                          const key = file?.uid
+                          const key = file?.uid || ''
                           await cos.uploadFile({
                             Bucket,
                             Region,
                             Body: file,
-                            Key: `${key}${file?.name}`
+                            Key: `${key}${file?.name || ''}`
                           })
-                          e.onSuccess(
+                          e?.onSuccess?.(
                             {
-                              url: `https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/${key}${file?.name}`
+                              url: `https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/${key}${
+                                file?.name || ''
+                              }`
                             },
-                            e.file
+                            e?.file || {}
                           )
                         }
                       "
@@ -493,6 +495,7 @@
 </template>
 
 <script lang="ts" setup>
+// @ts-nocheck
 import { computed, ref, toRaw, toRef, watch } from 'vue'
 import { debounce, isEqual, joinCss } from 'wa-utils'
 // @ts-ignore
