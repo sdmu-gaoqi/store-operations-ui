@@ -7,6 +7,7 @@
     <FormRender
       :schema="editSchema"
       :onFieldsChanged="() => {}"
+      :onFinish="onFinish"
     >
     <template #table4>
     <div>this is table4</div></template>
@@ -326,6 +327,15 @@ const editSchema = {
         mode: 'multiple',
       }
     },
+    'upload': {
+      title: '图片上传',
+      defaultValue: [
+        {
+          url: 'https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/vc-upload-1710067341254-2图层 2.png'
+        }
+      ],
+      type: 'uploadMultiple'
+    }
   },
   displayType: 'row',
   column: 2,

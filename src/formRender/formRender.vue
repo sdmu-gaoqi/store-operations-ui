@@ -355,6 +355,51 @@
                       :scroll="item.props?.scroll"
                       :pagination="item.props?.pagination"
                     />
+                    <Upload
+                      v-model:file-list="formState[key]"
+                      v-if="item.type === 'uploadMultiple'"
+                      :action="item?.props?.uploadProps?.accept?.action"
+                      list-type="picture-card"
+                      :accept="item?.props?.uploadProps?.accept"
+                      method="post"
+                      @preview="
+                        async (e) => {
+                          previewImage = e?.response?.url || e?.url || ''
+                          previewVisible = true
+                        }
+                      "
+                      :customRequest="
+                        async (e) => {
+                          const file = e.file
+                          const key = file?.uid
+                          await cos.uploadFile({
+                            Bucket,
+                            Region,
+                            Body: file,
+                            Key: `${key}${file?.name}`
+                          })
+                          e.onSuccess(
+                            {
+                              url: `https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/${key}${file?.name}`
+                            },
+                            e.file
+                          )
+                        }
+                      "
+                    >
+                      <div
+                        v-if="
+                          (formState[key]?.length || 1) <
+                          (item?.props?.uploadProps?.max || 10)
+                        "
+                      >
+                        <div style="margin-top: 8px">
+                          {{
+                            item?.props?.uploadProps?.uploadText || '上传图片'
+                          }}
+                        </div>
+                      </div>
+                    </Upload>
                   </Form.Item>
                 </Col>
                 <Col
@@ -430,8 +475,20 @@
             }}
           </Button>
         </div>
-      </Form></Spin
-    >
+      </Form>
+      <Modal
+        :open="previewVisible"
+        :footer="null"
+        title="预览"
+        @cancel="
+          () => {
+            previewVisible = false
+            previewImage = ''
+          }
+        "
+      >
+        <img alt="example" style="width: 100%" :src="previewImage" /> </Modal
+    ></Spin>
   </ThemeProvider>
 </template>
 
@@ -458,7 +515,9 @@ import {
   Tooltip,
   Table,
   AutoComplete,
-  Spin
+  Spin,
+  Upload,
+  Modal
 } from 'ant-design-vue'
 // @ts-ignore
 import ThemeProvider from '../themeProvider/themeProvider.vue'
@@ -468,6 +527,9 @@ import { renderSuffix } from './utils'
 import Classify from '@/assets/classify.svg'
 import { isEmpty } from 'wa-utils'
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
+import useCors from '../hooks/useCors'
+
+const { cos, Bucket, Region } = useCors()
 
 const getOptions = (options: any, item: any) => {
   const valueKey = item?.search?.value
@@ -507,6 +569,8 @@ const column = computed(() => {
 })
 const formState = ref<Record<string, any>>({})
 const formRef = ref()
+const previewVisible = ref(false)
+const previewImage = ref('')
 const schemaProperties: [string, Partial<SchemaBase>][] = Object.entries(
   schema?.value?.properties || {}
 )

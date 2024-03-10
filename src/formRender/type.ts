@@ -62,6 +62,11 @@ export interface SchemaBase {
   enumNames?: Array<string | number> | string
   rules?: any
   props?: Record<string, any>
+  uploadProps?: {
+    max?: number
+    uploadText?: string
+    accept?: string
+  }
   /**扩展字段 */
   'add-widget'?: string
   labelCol?: number | any
