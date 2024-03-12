@@ -2,7 +2,7 @@
   <ThemeProvider>
     <Card
       :title="props.title"
-      :class="`shadow op-ui-form-card ${props.className}}`"
+      :class="`shadow op-ui-form-card ${props.className}`"
     >
       <!-- <Spin :spinning="$props.loading" :style="{ height: '100%' }"> -->
       <template v-if="!props.hiddenDesc" #extra
