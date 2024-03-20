@@ -405,7 +405,7 @@
                     >
                       <div
                         v-if="
-                          (formState[key]?.length || 1) <
+                          (formState[key]?.length || 0) <
                           (item?.props?.uploadProps?.max || 10)
                         "
                       >
