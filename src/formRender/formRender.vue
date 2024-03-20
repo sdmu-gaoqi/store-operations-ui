@@ -563,16 +563,24 @@ const getOptions = (options: any, item: any) => {
   )
 }
 
-const selectSearch = debounce((v: any, item: any, key: any) => {
-  return item?.search
-    ?.request({ [item?.search?.key]: v, pageSize: 10, pageNum: 1 })
-    .then((res: any) => {
-      searchOptions.value = {
-        ...searchOptions.value,
-        [key]: res?.[item?.search?.dataKey]
-      }
-    })
-}, 500)
+const selectSearch = debounce(
+  (v: any, item: any, key: any, params?: Record<string, any>) => {
+    return item?.search
+      ?.request({
+        [item?.search?.key]: v,
+        pageSize: 10,
+        pageNum: 1,
+        ...(params || item?.search?.params || {})
+      })
+      .then((res: any) => {
+        searchOptions.value = {
+          ...searchOptions.value,
+          [key]: res?.[item?.search?.dataKey]
+        }
+      })
+  },
+  500
+)
 
 const loading = ref(false)
 const searchOptions = ref<any>({})
@@ -687,7 +695,8 @@ watch(formState.value, (preState: any, nextState: any) => {
 })
 defineExpose({
   formRef,
-  changeState
+  changeState,
+  selectSearch
 })
 </script>
 

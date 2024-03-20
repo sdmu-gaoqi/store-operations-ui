@@ -89,6 +89,7 @@ export interface SchemaBase {
     request: any // 请求
     dataKey: string // 渲染的data
     format?: any
+    params?: Record<string, any>
   }
 }
 export type Schema = Partial<SchemaBase>
