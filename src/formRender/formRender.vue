@@ -507,7 +507,7 @@
         </div>
       </Form>
       <Image
-        :width="200"
+        v-if="previewVisible"
         :style="{ display: 'none' }"
         :src="previewImage"
         :preview="{
