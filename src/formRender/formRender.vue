@@ -223,6 +223,8 @@
                       v-model:value="formState[key]"
                       :style="item?.props?.style || {}"
                       :disabled="item.props?.disabled"
+                      :readonly="item.props?.readonly ?? false"
+                      :bordered="item.props?.bordered ?? true"
                       @change="
                         (v) =>
                           props.onFieldChange && props.onFieldChange(key, v)
@@ -372,35 +374,47 @@
                       v-if="
                         item.type === 'uploadMultiple' && !item?.props?.readonly
                       "
-                      :action="item?.props?.uploadProps?.accept?.action"
                       list-type="picture-card"
                       :accept="item?.props?.uploadProps?.accept"
                       method="post"
                       @preview="
                         async (e) => {
-                          previewImage = e?.response?.url || e?.url || ''
+                          const isLocal =
+                            locationData.origin.includes('localhost')
+                          const origin = isLocal
+                            ? 'http://111.229.138.125:8080'
+                            : `${locationData.origin}:8080`
+                          previewImage =
+                            e?.response?.url || e?.url
+                              ? e?.response?.url || e?.url
+                              : `${origin}${e?.response?.data?.filePath}`
                           previewVisible = true
                         }
                       "
+                      :action="item?.props?.uploadProps?.action"
+                      :headers="item?.props?.uploadProps?.headers"
+                      :beforeUpload="item?.props?.uploadProps?.beforeUpload"
                       :customRequest="
-                        async (e) => {
-                          const file = e.file
-                          const key = file?.uid || ''
-                          await cos.uploadFile({
-                            Bucket,
-                            Region,
-                            Body: file,
-                            Key: `${key}${file?.name || ''}`
-                          })
-                          e?.onSuccess?.(
-                            {
-                              url: `https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/${key}${
-                                file?.name || ''
-                              }`
-                            },
-                            e?.file || {}
-                          )
-                        }
+                        item?.props?.uploadProps?.action
+                          ? false
+                          : async (e) => {
+                              const file = e.file
+                              const key = file?.uid || ''
+                              await cos.uploadFile({
+                                Bucket,
+                                Region,
+                                Body: file,
+                                Key: `${key}${file?.name || ''}`
+                              })
+                              e?.onSuccess?.(
+                                {
+                                  url: `https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/${key}${
+                                    file?.name || ''
+                                  }`
+                                },
+                                e?.file || {}
+                              )
+                            }
                       "
                     >
                       <div
@@ -492,7 +506,18 @@
           </Button>
         </div>
       </Form>
-      <Modal
+      <Image
+        :width="200"
+        :style="{ display: 'none' }"
+        :src="previewImage"
+        :preview="{
+          visible: previewVisible,
+          onVisibleChange: (v) => {
+            previewVisible = v
+          }
+        }"
+      />
+      <!-- <Modal
         :open="previewVisible"
         :footer="null"
         title="预览"
@@ -503,8 +528,9 @@
           }
         "
       >
-        <img alt="example" style="width: 100%" :src="previewImage" /> </Modal
-    ></Spin>
+        <img alt="example" style="width: 100%" :src="previewImage" />
+      </Modal> -->
+    </Spin>
   </ThemeProvider>
 </template>
 
@@ -534,7 +560,8 @@ import {
   AutoComplete,
   Spin,
   Upload,
-  Modal
+  Modal,
+  Image
 } from 'ant-design-vue'
 // @ts-ignore
 import ThemeProvider from '../themeProvider/themeProvider.vue'
@@ -545,6 +572,8 @@ import Classify from '@/assets/classify.svg'
 import { isEmpty } from 'wa-utils'
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 import useCors from '../hooks/useCors'
+
+const locationData = window?.location
 
 const { cos, Bucket, Region } = useCors()
 
