@@ -264,7 +264,7 @@ defineExpose({
 .login-content {
   width: 100%;
   height: 100%;
-  background-image: url('../assets/loginBanner.png');
+  background-image: url('../assets/loginBanner.jpg');
   background-size: cover;
   min-width: 1366px;
   min-height: 756px;
