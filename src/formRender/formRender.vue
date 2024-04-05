@@ -394,6 +394,7 @@
                       :action="item?.props?.uploadProps?.action"
                       :headers="item?.props?.uploadProps?.headers"
                       :beforeUpload="item?.props?.uploadProps?.beforeUpload"
+                      @change="item?.props?.uploadProps?.change"
                       :customRequest="
                         item?.props?.uploadProps?.action
                           ? false
