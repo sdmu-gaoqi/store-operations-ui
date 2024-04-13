@@ -8,6 +8,8 @@ export type SchemaType =
   | 'date'
   | 'datetime'
   | 'block'
+  | 'upload'
+  | 'uploadMultiple'
   | string
 
 export interface SchemaBase {
@@ -49,6 +51,7 @@ export interface SchemaBase {
   column?: number
   className?: string
   widget?: string
+  colClass?: string
   readOnlyWidget?: string
   extra?: string
   properties?: Record<string, Schema>
@@ -59,6 +62,11 @@ export interface SchemaBase {
   enumNames?: Array<string | number> | string
   rules?: any
   props?: Record<string, any>
+  uploadProps?: {
+    max?: number
+    uploadText?: string
+    accept?: string
+  }
   /**扩展字段 */
   'add-widget'?: string
   labelCol?: number | any
@@ -68,12 +76,12 @@ export interface SchemaBase {
   span?: number
   validateTrigger?: string | string[]
   [key: string]: any
-  footer: {
+  footer?: {
     submit?: boolean | string
     reset?: boolean | string
     cancel?: boolean | string
   }
-  'ui:hidden': boolean | string
+  'ui:hidden'?: boolean | string
   search?: {
     key?: string // 搜索的key
     label?: string // label字段,
@@ -81,6 +89,7 @@ export interface SchemaBase {
     request: any // 请求
     dataKey: string // 渲染的data
     format?: any
+    params?: Record<string, any>
   }
 }
 export type Schema = Partial<SchemaBase>
@@ -94,4 +103,8 @@ export type FormRenderProps = {
     data: { preState: any; nextState: any }
   ) => void
   onFieldChange?: (key: any, value: any) => void
+  loading?: boolean
+  className?: string
+  bodyClassName?: string
+  rowClassName?: string
 }

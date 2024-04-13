@@ -16,27 +16,27 @@
           ></Input>
           <DatePicker
             v-if="i.type === 'date'"
-            :show-time="i.format === 'dateTime'"
+            :show-time="i?.format === 'dateTime'"
             :placeholder="i.placeholder || i.label"
             v-model:value="formState[i.key]"
             :locale="locale"
             class="w-[100%]"
             :picker="
-              ['week', 'month', 'quarter', 'year'].includes(i.format)
-                ? i.format
+              ['week', 'month', 'quarter', 'year'].includes(i?.format)
+                ? i?.format
                 : undefined
             "
           ></DatePicker>
           <DatePicker.RangePicker
             v-if="i.type === 'range'"
             :placeholder="i.placeholder || i.label"
-            :show-time="i.format === 'dateTime'"
+            :show-time="i?.format === 'dateTime'"
             v-model:value="formState[i.key]"
             class="w-[100%]"
             :locale="locale"
             :picker="
-              ['week', 'month', 'quarter', 'year'].includes(i.format)
-                ? i.format
+              ['week', 'month', 'quarter', 'year'].includes(i?.format)
+                ? i?.format
                 : undefined
             "
           ></DatePicker.RangePicker>
@@ -51,7 +51,7 @@
           ></Select>
         </Form.Item>
       </Col>
-      <div class="pl-[110px]">
+      <div class="pl-[60px] ml-auto">
         <Button
           v-if="form && form.search"
           class="opui-form-button bg-primary"
@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts" setup>
-import { toRef, toRefs, ref, reactive } from 'vue'
+import { toRef, toRefs, ref, reactive, watch } from 'vue'
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 import {
   Button,
@@ -99,7 +99,8 @@ const props = defineProps({
   form: Object,
   options: Object,
   submit: Function,
-  handleExport: Function
+  handleExport: Function,
+  activeKey: String
 })
 
 interface FormState {
@@ -112,6 +113,23 @@ const { form, options } = toRefs(props)
 const { submit, handleExport } = props
 
 const fields = toRef(form!.value!.fields)
+
+watch(
+  () => props.activeKey,
+  () => {
+    const curFields = form!.value!.fields?.filter(
+      (item: any) => !item?.activeKey || item?.activeKey == props.activeKey
+    )
+    const hasTabKeys = fields.value
+      ?.filter((item: any) => item?.activeKey)
+      ?.map((item: any) => {
+        return item?.names ? item.names : item?.key
+      })
+      ?.flat()
+    formRef.value.resetFields(hasTabKeys)
+    fields.value = curFields
+  }
+)
 
 const getOptions = (key: string) => {
   if (!options?.value) {
@@ -138,19 +156,19 @@ const getFormValue = async () => {
     if (target && target.type && res[k]) {
       if (target.type === 'date') {
         let dateFormat = 'YYYY-MM-DD'
-        if (target.format === 'timestamp') {
+        if (target?.format === 'timestamp') {
           value[k] = +new Date(res[k])
-        } else if (target.format === 'month') {
+        } else if (target?.format === 'month') {
           dateFormat = 'YYYY-MM'
-        } else if (target.format === 'year') {
+        } else if (target?.format === 'year') {
           dateFormat = 'YYYY'
-        } else if (target.format === 'dateTime') {
+        } else if (target?.format === 'dateTime') {
           dateFormat = 'YYYY-MM-DD HH:mm:ss'
         }
-        value[k] = res[k].format(dateFormat)
+        value[k] = res[k]?.format(dateFormat)
       } else if (target.type === 'range') {
         let dateFormat = 'YYYY-MM-DD'
-        if (target.format === 'timestamp') {
+        if (target?.format === 'timestamp') {
           const date1 = new Date(res[k]?.[0])
           date1.setHours(0)
           date1.setMinutes(0)
@@ -161,14 +179,16 @@ const getFormValue = async () => {
           date2.setSeconds(59)
           value[keys?.[0]] = +date1
           value[keys?.[1]] = +date2
-        } else if (target.format === 'month') {
+        } else if (target?.format === 'month') {
           dateFormat === 'YYYY-MM'
-        } else if (target.format === 'year') {
+        } else if (target?.format === 'year') {
           dateFormat = 'YYYY'
-        } else if (target.format === 'dateTime') {
+        } else if (target?.format === 'dateTime') {
           dateFormat = 'YYYY-MM-DD HH:mm:ss'
         }
-        ;(value[k] = res[k]).map((v: any) => v.format(dateFormat))
+        ;(value[k] = res[k]?.filter((item: any) => item)).map(
+          (v: any) => v?.format(dateFormat)
+        )
       } else {
         value[k] = res[k]
       }
@@ -189,7 +209,7 @@ const onFinish = async () => {
 const onReset = () => {
   formRef.value.resetFields()
   if (submit) {
-    submit({})
+    submit({}, { reset: true })
   }
 }
 

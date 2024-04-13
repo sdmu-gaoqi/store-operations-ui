@@ -5,11 +5,13 @@
 <FormCard title="新增房间">
   <template #content>
     <FormRender
-      :on-finish="onFinish"
-      :on-cancel="onCancel"
       :schema="editSchema"
       :onFieldsChanged="() => {}"
-    ></FormRender>
+      :onFinish="onFinish"
+    >
+    <template #table4>
+    <div>this is table4</div></template>
+    </FormRender>
   </template>
 </FormCard>
 
@@ -57,7 +59,7 @@ const editSchema = {
         key: 'phone',
         label: 'memberName',
         value: 'memberId',
-        request: member.list,
+        // request: member.list,
         dataKey: 'rows',
         format: (v) => {
           return v?.map(item => ({
@@ -322,8 +324,17 @@ const editSchema = {
             value: 'B'
           }
         ],
-        mode: 'multiple'
+        mode: 'multiple',
       }
+    },
+    'upload': {
+      title: '图片上传',
+      defaultValue: [
+        {
+          url: 'https://rxyy-1318831585.cos.ap-shanghai.myqcloud.com/vc-upload-1710067341254-2图层 2.png'
+        }
+      ],
+      type: 'uploadMultiple'
     }
   },
   displayType: 'row',

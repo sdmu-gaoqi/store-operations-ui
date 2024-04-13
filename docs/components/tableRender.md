@@ -2,7 +2,7 @@
 
 ## TableRender Demo
 
-<TableRender :schema="schema" v-model:activeKey="activeKey" :request="(value) => console.log(value)">
+<TableRender :list="[{}]" :schema="schema" v-model:activeKey="activeKey" :request="(value) => console.log(value)">
 <template v-slot:formButton><div>自定义按钮</div></template>
 <template #bodyCell="{data}">
 {{data.text}}

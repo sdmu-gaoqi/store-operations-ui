@@ -19,14 +19,14 @@
                 @click="() => changeLoginTye('userName')"
                 >账号登录</span
               >
-              <div class="w-[1px] h-[16px] bg-slate-600 mx-[20px]" />
-              <span
+              <!-- <div class="w-[1px] h-[16px] bg-slate-600 mx-[20px]" /> -->
+              <!-- <span
                 :class="`login-tab ${
                   loginType === 'phone' && ' loginActiveTab'
                 }`"
                 @click="() => changeLoginTye('phone')"
                 >手机号登陆</span
-              >
+              > -->
             </div>
           </div>
           <Form.Item v-bind="validateInfos.account" name="account">
@@ -34,6 +34,7 @@
               :label="configs.namePlaceholder"
               class="login-input"
               v-model:value="formState.account"
+              placeholder="请输入用户名"
               size="large"
             >
               <template #prefix> <user-outlined /> </template>
@@ -45,6 +46,7 @@
               :label="configs.passwordPlaceholder"
               class="login-input"
               type="password"
+              placeholder="请输入密码"
               v-model:value="formState.password"
               size="large"
             >
@@ -94,6 +96,7 @@
             >
           </Form.Item>
         </Form>
+        <div class="login-desc"></div>
       </div>
     </ThemeProvider>
   </div>
@@ -126,8 +129,8 @@ interface FormState {
 }
 
 const formState = reactive<FormState>({
-  account: 'admin',
-  password: 'admin123',
+  account: '',
+  password: '',
   agree: true
 })
 
@@ -261,7 +264,7 @@ defineExpose({
 .login-content {
   width: 100%;
   height: 100%;
-  background-image: url('../assets/loginBanner.png');
+  background-image: url('../assets/loginBanner.jpg');
   background-size: cover;
   min-width: 1366px;
   min-height: 756px;
@@ -279,18 +282,6 @@ defineExpose({
     top: 50%;
     transform: translateY(-50%);
     width: 540px;
-
-    &::after {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      bottom: -40px;
-      display: block;
-      content: '日新月异公司 版权所有 ICP备: 系统版本号V1.0';
-      color: #fff;
-      text-align: center;
-    }
   }
 }
 
@@ -307,5 +298,28 @@ defineExpose({
 .login-input {
   border-radius: 6px;
   width: 100%;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-transition-delay: 99999s;
+  -webkit-transition:
+    color 99999s ease-out,
+    background-color 99999s ease-out;
+}
+
+.login-desc {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  &::after {
+    width: 100%;
+    display: block;
+    content: '日新月异公司 版权所有 ICP备: 系统版本号V1.2.0';
+    color: #fff;
+    text-align: center;
+  }
 }
 </style>

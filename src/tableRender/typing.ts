@@ -49,4 +49,5 @@ export interface TableProps {
   request: (data?: any) => Promise<any>
   list?: Record<string, any>[]
   formatParams?: (data: Record<string, any>) => any
+  cardStyle?: any
 }

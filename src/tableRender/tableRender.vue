@@ -1,8 +1,13 @@
 <template>
   <ThemeProvider>
-    <Card :title="realSchema?.title" :class="joinCss('soui', ['tabs'])">
+    <Card
+      :title="realSchema?.title"
+      :class="joinCss('soui', ['tabs'])"
+      :style="props.cardStyle || {}"
+    >
       <TableFormRender
         :options="schema && schema.options"
+        :active-key="props.activeKey"
         :form="schema && schema.form"
         :submit="formChange"
       >
@@ -31,11 +36,17 @@
             :bordered="true"
             :loading="loading"
             :on-change="changePage"
-            :pagination="{
-              current: listData?.current,
-              pageSize: listData?.pageSize,
-              total: listData?.total
-            }"
+            :pagination="
+              tableProps?.pagination ?? {
+                current: listData?.current,
+                pageSize: listData?.pageSize,
+                total: listData?.total,
+                showTotal: (total) => `共${total}条`
+              }
+            "
+            :row-selection="tableProps?.rowSelection"
+            :row-key="tableProps?.rowKey"
+            :size="tableProps?.size"
           >
             <slot.default v-if="slot.default"></slot.default>
             <template #bodyCell="data" v-if="slot.bodyCell">
@@ -63,11 +74,17 @@
         :bordered="true"
         :loading="loading"
         :on-change="changePage"
-        :pagination="{
-          current: listData?.current,
-          pageSize: listData?.pageSize,
-          total: listData?.total
-        }"
+        :pagination="
+          tableProps?.pagination ?? {
+            current: listData?.current,
+            pageSize: listData?.pageSize,
+            total: listData?.total,
+            showTotal: (total) => `共${total}条`
+          }
+        "
+        :row-selection="tableProps?.rowSelection"
+        :row-key="tableProps?.rowKey"
+        :size="tableProps?.size"
       >
         <template #bodyCell="data" v-if="slot.bodyCell">
           <slot.bodyCell
@@ -85,7 +102,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, toRef, toRefs } from 'vue'
+import { computed, onMounted, toRaw, toRef, toRefs } from 'vue'
 import { schema as defaultSchema } from './templete'
 import {
   Card,
@@ -96,7 +113,7 @@ import {
 } from 'ant-design-vue'
 // @ts-ignore
 import ThemeProvider from '../themeProvider/themeProvider.vue'
-import { joinCss } from 'wa-utils'
+import { cloneDeep, joinCss } from 'wa-utils'
 import { formatColumns, formatColumn } from './utils'
 // @ts-ignore
 import TableFormRender from '../tableFormRender/tableFormRender.vue'
@@ -116,7 +133,8 @@ const props = defineProps({
   onSearch: Function,
   request: Function,
   list: Array,
-  formatParams: Function
+  formatParams: Function,
+  cardStyle: Object
 }) as TableProps
 const { onSearch = () => {} } = props
 
@@ -128,12 +146,23 @@ const {
   data: listData,
   params
 } = useRequest<CommonResponse<ListResponse>>((p: any) =>
-  props.request({
-    ...(props.schema?.tabKey && {
-      [props.schema?.tabKey]: props?.schema?.tabs?.[0]?.key
-    }),
-    ...(p || {})
-  })
+  props
+    .request({
+      ...(props.schema?.tabKey && {
+        [props.schema?.tabKey]: props?.schema?.tabs?.[0]?.key
+      }),
+      ...(p || {})
+    })
+    .then((res) => {
+      const p: any = {
+        current: (toRaw(params.value)?.[0] as any)?.pageNum || 1,
+        pageSize: (toRaw(params.value)?.[0] as any)?.pageSize || 10
+      }
+      return {
+        ...res,
+        ...p
+      }
+    })
 )
 
 const realSchema = schema?.value ? schema : toRef(defaultSchema)
@@ -151,13 +180,23 @@ const formChange = (value: Parameters<typeof onSearch>[0]) => {
   if (onSearch) {
     onSearch(value)
   }
-  const params = props.formatParams ? props.formatParams(value) : value
+  const _params = props.formatParams ? props.formatParams(value) : value
+  const oldP = cloneDeep(toRaw(params.value)?.[0] || ({} as any))
+  const tabKeys = props?.schema?.tabKey || 'tab'
   run({
-    ...params
+    pageNum: 1,
+    ...(tabKeys &&
+      oldP[tabKeys] && {
+        [tabKeys]: oldP[tabKeys]
+      }),
+    ..._params
   })
 }
 
 const changePage = (value: TablePaginationConfig) => {
+  if (!listData.value?.rows) {
+    return
+  }
   const lastParam = params?.value ? (params?.value?.[0] as {}) : {}
   run({
     ...lastParam,
@@ -167,7 +206,20 @@ const changePage = (value: TablePaginationConfig) => {
 }
 
 const changeTab = (v: any) => {
+  const lastParam = params?.value ? (params?.value?.[0] as {}) : ({} as any)
+  const hasTabKeys = schema?.value?.form?.fields
+    ?.filter((item: any) => item?.activeKey)
+    ?.map((item: any) => {
+      return item?.names ? item.names : item?.key
+    })
+    ?.flat()
+  if (lastParam) {
+    hasTabKeys.forEach((i: any) => {
+      delete lastParam[i]
+    })
+  }
   run({
+    ...lastParam,
     pageNum: 1,
     [props?.schema?.tabKey || 'tab']: v
   })
@@ -187,7 +239,6 @@ defineExpose({
 
 <style lang="scss">
 .soui-tabs {
-  user-select: none;
   .ant-tabs-tab.ant-tabs-tab-active {
     @apply bg-primary;
     .ant-tabs-tab-btn {

@@ -1,6 +1,9 @@
 <template>
   <ThemeProvider>
-    <Card :title="props.title" class="shadow op-ui-form-card">
+    <Card
+      :title="props.title"
+      :class="`shadow op-ui-form-card ${props.className}`"
+    >
       <!-- <Spin :spinning="$props.loading" :style="{ height: '100%' }"> -->
       <template v-if="!props.hiddenDesc" #extra
         ><div class="flex items-center">
@@ -14,14 +17,14 @@
       >
       <slot.content></slot.content>
       <div
-        class="mt-[50px] op-ui-form-card-footer flex justify-center items-center"
+        class="mt-[50px] op-ui-form-card-footer flex justify-center items-center py-[10px] bg-[#f5f5f5]"
       >
         <Button
           v-if="props?.footer?.cancel"
           type="primary"
           :ghost="true"
           class="mr-[50px] w-[120px]"
-          :on-click="() => debounce(onCancel)"
+          @click="onCancel"
           >{{
             typeof props?.footer?.cancel === 'string'
               ? props.footer?.cancel
@@ -32,7 +35,7 @@
           v-if="props?.footer?.submit"
           type="primary"
           class="w-[120px]"
-          :on-click="() => debounce(onSubmit)"
+          @click="onSubmit"
           >{{
             typeof props?.footer?.submit === 'string'
               ? props.footer?.submit
@@ -46,9 +49,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Card, Button } from 'ant-design-vue'
-import { debounce, isEmpty } from 'wa-utils'
+import { isEmpty } from 'wa-utils'
 import ThemeProvider from '../themeProvider/themeProvider.vue'
+import { Button, Card } from 'ant-design-vue'
 
 const slot = defineSlots()
 export interface FormCardProps {
@@ -62,6 +65,7 @@ export interface FormCardProps {
   onCancel?: () => void
   onSubmit?: () => void
   loading?: boolean
+  className?: string
 }
 const props = defineProps<FormCardProps>()
 const onCancel = () => {
@@ -71,7 +75,7 @@ const onCancel = () => {
 }
 const onSubmit = () => {
   if (props.onSubmit) {
-    props.onSubmit
+    props.onSubmit()
   }
 }
 </script>
