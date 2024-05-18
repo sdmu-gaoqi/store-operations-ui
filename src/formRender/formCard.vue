@@ -35,6 +35,7 @@
           v-if="props?.footer?.submit"
           type="primary"
           class="w-[120px]"
+          :loading="props?.submitLoading"
           @click="onSubmit"
           >{{
             typeof props?.footer?.submit === 'string'
@@ -66,6 +67,7 @@ export interface FormCardProps {
   onSubmit?: () => void
   loading?: boolean
   className?: string
+  submitLoading?: boolean
 }
 const props = defineProps<FormCardProps>()
 const onCancel = () => {
