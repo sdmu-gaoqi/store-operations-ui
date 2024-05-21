@@ -687,7 +687,9 @@ const onSubmit = () => {
             cancelText: '取消',
             okText: '确认',
             content: props.finishBefore,
-            onCancel: () => {},
+            onCancel: () => {
+              loading.value = false
+            },
             onOk: async () => {
               await props.onFinish(formStateValue)
               loading.value = false
