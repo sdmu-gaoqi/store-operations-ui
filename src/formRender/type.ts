@@ -97,6 +97,7 @@ export type Schema = Partial<SchemaBase>
 export type FormRenderProps = {
   schema: Schema
   onFinish?: (value: Record<string, any>) => void
+  finishBefore?: any
   onCancel?: () => void
   onFieldsChanged?: (
     value: Record<string, any>,

@@ -682,8 +682,21 @@ const onSubmit = () => {
         }
       })
       if (props.onFinish) {
-        await props.onFinish(formStateValue)
-        loading.value = false
+        if (props.finishBefore) {
+          Modal.confirm({
+            cancelText: '取消',
+            okText: '确认',
+            content: props.finishBefore,
+            onCancel: () => {},
+            onOk: async () => {
+              await props.onFinish(formStateValue)
+              loading.value = false
+            }
+          })
+        } else {
+          await props.onFinish(formStateValue)
+          loading.value = false
+        }
       } else {
         loading.value = false
       }
