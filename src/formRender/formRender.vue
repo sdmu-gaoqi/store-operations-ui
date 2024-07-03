@@ -197,6 +197,13 @@
                       :disabled="item.props?.disabled"
                       :allow-clear="true"
                       :show-search="true"
+                      :filterOption="
+                        (inputValue, option) => {
+                          return String(option?.label)
+                            ?.toLocaleLowerCase()
+                            ?.includes(inputValue?.toLocaleLowerCase())
+                        }
+                      "
                       @change="
                         (v) =>
                           props.onFieldChange && props.onFieldChange(key, v)
