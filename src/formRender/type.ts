@@ -54,7 +54,7 @@ export interface SchemaBase {
   colClass?: string
   readOnlyWidget?: string
   extra?: string
-  properties?: Record<string, Schema>
+  properties: Record<string, Schema>
   items?: Schema
   /** 多选，支持表达式 */
   enum?: Array<string | number> | string
