@@ -90,6 +90,7 @@ export interface SchemaBase {
     dataKey: string // 渲染的data
     format?: any
     params?: Record<string, any>
+    defaultValue: any
   }
 }
 export type Schema = Partial<SchemaBase>
