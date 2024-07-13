@@ -94,10 +94,10 @@
                         isEmpty(searchOptions?.[key])
                           ? item?.props?.options || []
                           : item?.search?.format
-                          ? item?.search?.format(
-                              toRaw(getOptions(searchOptions?.[key], item))
-                            )
-                          : getOptions(searchOptions?.[key], item)
+                            ? item?.search?.format(
+                                toRaw(getOptions(searchOptions?.[key], item))
+                              )
+                            : getOptions(searchOptions?.[key], item)
                       "
                       @search="(v) => selectSearch(v, item, key)"
                       :placeholder="item?.placeholder || '请选择'"
@@ -269,6 +269,8 @@
                       :style="item?.props?.style || { width: '50%' }"
                       v-model:value="formState[key]"
                       :disabled="item.props?.disabled"
+                      :disabledDate="item.props?.disabledDate"
+                      :disabledTime="item.props?.disabledTime"
                       :format="
                         getFormat(
                           item?.picker || item?.format,
