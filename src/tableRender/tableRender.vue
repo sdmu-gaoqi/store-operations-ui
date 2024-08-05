@@ -151,6 +151,8 @@ const {
       ...(props.schema?.tabKey && {
         [props.schema?.tabKey]: props?.schema?.tabs?.[0]?.key
       }),
+      pageNum: p?.pageNum || 1,
+      pageSize: p?.pageSize || 10,
       ...(p || {})
     })
     .then((res) => {

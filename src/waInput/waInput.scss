@@ -69,8 +69,10 @@ $prefix-cls: 'wa-input';
     height: 100%;
     display: flex;
     align-items: center;
+
     &-focus {
       @include active-label;
+
       ~ input {
         @include active-input;
       }
@@ -84,6 +86,7 @@ $prefix-cls: 'wa-input';
     transform: translate(-10px, -50%);
     z-index: -1;
     top: 50%;
+
     &-focus {
       @include active-border;
     }
@@ -114,11 +117,10 @@ $prefix-cls: 'wa-input';
 }
 
 .#{$prefix-cls}-input:-webkit-autofill ~ .#{$prefix-cls}-label {
+  @include active-label;
   .#{$prefix-cls}-border {
     @include active-border;
   }
-
-  @include active-label;
 }
 
 .#{$prefix-cls}-wrapper.#{$prefix-cls}-wrapper-prefix {

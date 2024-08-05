@@ -8,3 +8,16 @@ export type { Schema, FormRenderProps } from './formRender/type'
 export type { FormCardProps } from './formRender/formCard.vue'
 export type { TableProps } from './tableRender/typing'
 import 'ant-design-vue/dist/reset.css'
+import { ThemeConfig } from 'ant-design-vue/es/config-provider/context'
+
+export let themeConfig: ThemeConfig = {
+  token: {
+    colorPrimary: '#6102fd',
+    colorTextBase: '#6a6d82',
+    colorBgBase: '#fff'
+  }
+}
+
+export const changeTheme = (data: ThemeConfig) => {
+  themeConfig = data
+}

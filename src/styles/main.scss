@@ -1,11 +1,23 @@
 @import './twilwind.global';
 
-$main-color: #bb5717;
-$border-color: #bbb;
-$error-color: red;
-$wain-color: #f6b53d;
-$label-color: #6a6d82;
-$font-color: #6a6d82;
-$size: 12px;
-$size-md: 16px;
-$size-lg: 20px;
+:root {
+  --main-color: #6102fd;
+  --border-color: #bbb;
+  --error-color: red;
+  --wain-color: #f6b53d;
+  --label-color: #6a6d82;
+  --font-color: #6a6d82;
+  --size: 12px;
+  --size-md: 16px;
+  --size-lg: 20px;
+}
+
+$main-color: var(--color-primary);
+$border-color: var(--border-color);
+$error-color: var(--error-color);
+$wain-color: var(--wain-color);
+$label-color: var(--label-color);
+$font-color: var(--font-color);
+$size: var(--size);
+$size-md: var(--size-md);
+$size-lg: var(--size-lg);
