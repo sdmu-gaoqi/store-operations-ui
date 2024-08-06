@@ -233,8 +233,17 @@ onMounted(() => {
   }
 })
 
+const reset = () => {
+  const lastParam = params?.value ? (params?.value?.[0] as {}) : {}
+  run({
+    ...lastParam,
+    pageNum: 1
+  })
+}
+
 defineExpose({
   run,
+  reset,
   params
 })
 </script>
