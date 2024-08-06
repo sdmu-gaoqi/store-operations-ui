@@ -95,15 +95,12 @@ export interface SchemaBase {
 }
 export type Schema = Partial<SchemaBase>
 
-export type FormRenderProps = {
+export type FormRenderProps<T = any> = {
   schema: Schema
-  onFinish?: (value: Record<string, any>) => void
+  onFinish?: (value: T) => void
   finishBefore?: any
   onCancel?: () => void
-  onFieldsChanged?: (
-    value: Record<string, any>,
-    data: { preState: any; nextState: any }
-  ) => void
+  onFieldsChanged?: (value: T, data: { preState: any; nextState: any }) => void
   onFieldChange?: (key: any, value: any) => void
   loading?: boolean
   className?: string

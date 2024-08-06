@@ -544,7 +544,7 @@
   </ThemeProvider>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="T extends any">
 // @ts-nocheck
 import { computed, ref, toRaw, toRef, watch } from 'vue'
 import { debounce, isEqual, joinCss } from 'wa-utils'
@@ -640,7 +640,7 @@ const schemaProperties: [string, Partial<SchemaBase>][] = Object.entries(
 )
 
 schemaProperties.forEach(([key, value]) => {
-  formState.value[key] = value?.defaultValue || undefined
+  formState.value[key] = value?.defaultValue ?? undefined
   if (value?.search) {
     selectSearch('', value, key)
   }
