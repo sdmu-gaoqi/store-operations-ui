@@ -1,4 +1,5 @@
-import type { TableProps as AntdTableProps } from 'ant-design-vue'
+import { FormRenderProps } from '@/formRender/type'
+import type { TableProps as AntdTableProps, DrawerProps } from 'ant-design-vue'
 
 export type ColumnItem = Record<string, any> & {
   title: string
@@ -50,4 +51,13 @@ export interface TableProps {
   list?: Record<string, any>[]
   formatParams?: (data: Record<string, any>) => any
   cardStyle?: any
+  /**
+   * drawer展示的form的schema
+   * */
+  drawer?: {
+    schema: FormRenderProps['schema']
+    type: string
+    onFinish: (v: any) => Promise<any>
+    finishBefore?: string
+  } & DrawerProps
 }

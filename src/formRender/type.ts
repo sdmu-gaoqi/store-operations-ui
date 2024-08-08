@@ -14,6 +14,10 @@ export type SchemaType =
 
 export interface SchemaBase {
   type?: SchemaType
+  /**
+   * 可以用作schema唯一标识
+   * */
+  key?: string
   title?: string
   description?: string
   descType?: 'text' | 'icon'
@@ -54,7 +58,7 @@ export interface SchemaBase {
   colClass?: string
   readOnlyWidget?: string
   extra?: string
-  properties?: Record<string, Schema>
+  properties: Record<string, Schema>
   items?: Schema
   /** 多选，支持表达式 */
   enum?: Array<string | number> | string
@@ -90,18 +94,17 @@ export interface SchemaBase {
     dataKey: string // 渲染的data
     format?: any
     params?: Record<string, any>
+    defaultValue?: any
   }
 }
 export type Schema = Partial<SchemaBase>
 
-export type FormRenderProps = {
+export type FormRenderProps<T = any> = {
   schema: Schema
-  onFinish?: (value: Record<string, any>) => void
+  onFinish?: (value: T) => void
+  finishBefore?: any
   onCancel?: () => void
-  onFieldsChanged?: (
-    value: Record<string, any>,
-    data: { preState: any; nextState: any }
-  ) => void
+  onFieldsChanged?: (value: T, data: { preState: any; nextState: any }) => void
   onFieldChange?: (key: any, value: any) => void
   loading?: boolean
   className?: string

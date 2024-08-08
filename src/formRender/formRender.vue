@@ -94,10 +94,10 @@
                         isEmpty(searchOptions?.[key])
                           ? item?.props?.options || []
                           : item?.search?.format
-                          ? item?.search?.format(
-                              toRaw(getOptions(searchOptions?.[key], item))
-                            )
-                          : getOptions(searchOptions?.[key], item)
+                            ? item?.search?.format(
+                                toRaw(getOptions(searchOptions?.[key], item))
+                              )
+                            : getOptions(searchOptions?.[key], item)
                       "
                       @search="(v) => selectSearch(v, item, key)"
                       :placeholder="item?.placeholder || '请选择'"
@@ -197,6 +197,13 @@
                       :disabled="item.props?.disabled"
                       :allow-clear="true"
                       :show-search="true"
+                      :filterOption="
+                        (inputValue, option) => {
+                          return String(option?.label)
+                            ?.toLocaleLowerCase()
+                            ?.includes(inputValue?.toLocaleLowerCase())
+                        }
+                      "
                       @change="
                         (v) =>
                           props.onFieldChange && props.onFieldChange(key, v)
@@ -262,6 +269,8 @@
                       :style="item?.props?.style || { width: '50%' }"
                       v-model:value="formState[key]"
                       :disabled="item.props?.disabled"
+                      :disabledDate="item.props?.disabledDate"
+                      :disabledTime="item.props?.disabledTime"
                       :format="
                         getFormat(
                           item?.picker || item?.format,
@@ -535,7 +544,7 @@
   </ThemeProvider>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="T extends any">
 // @ts-nocheck
 import { computed, ref, toRaw, toRef, watch } from 'vue'
 import { debounce, isEqual, joinCss } from 'wa-utils'
@@ -631,7 +640,7 @@ const schemaProperties: [string, Partial<SchemaBase>][] = Object.entries(
 )
 
 schemaProperties.forEach(([key, value]) => {
-  formState.value[key] = value?.defaultValue || undefined
+  formState.value[key] = value?.defaultValue ?? undefined
   if (value?.search) {
     selectSearch('', value, key)
   }
@@ -682,8 +691,23 @@ const onSubmit = () => {
         }
       })
       if (props.onFinish) {
-        await props.onFinish(formStateValue)
-        loading.value = false
+        if (props.finishBefore) {
+          Modal.confirm({
+            cancelText: '取消',
+            okText: '确认',
+            content: props.finishBefore,
+            onCancel: () => {
+              loading.value = false
+            },
+            onOk: async () => {
+              await props.onFinish(formStateValue)
+              loading.value = false
+            }
+          })
+        } else {
+          await props.onFinish(formStateValue)
+          loading.value = false
+        }
       } else {
         loading.value = false
       }

@@ -1,13 +1,5 @@
 <template>
-  <ConfigProvider
-    :locale="zhCN"
-    :theme="{
-      token: {
-        colorPrimary: '#6102fd',
-        colorTextBase: '#6a6d82',
-        colorBgBase: '#fff'
-      }
-    }"
+  <ConfigProvider :locale="zhCN" :theme="themeConfig"
     ><solt.default></solt.default
   ></ConfigProvider>
 </template>
@@ -16,6 +8,7 @@
 import { ConfigProvider } from 'ant-design-vue'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import 'dayjs/locale/zh-cn'
+import { themeConfig } from '..'
 const solt = defineSlots()
 
 // @ts-ignore

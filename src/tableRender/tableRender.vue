@@ -98,18 +98,44 @@
         <template #footer v-if="slot.footer"><slot.footer /></template>
       </Table>
     </Card>
+    <Drawer
+      @close="() => (showDrawer = false)"
+      :open="showDrawer"
+      :title="props?.drawer?.schema?.title || '详情'"
+      :bodyStyle="{ padding: 0 }"
+      :width="props?.drawer?.width"
+      :class="props?.drawer?.class"
+    >
+      <FormRender
+        :schema="props?.drawer?.schema"
+        ref="drawerFormRef"
+        :on-finish="
+          async (v) => {
+            await props?.drawer?.onFinish?.(v)
+            showDrawer = false
+          }
+        "
+        :on-cancel="
+          () => {
+            showDrawer = false
+          }
+        "
+        :finish-before="props?.drawer?.finishBefore"
+      />
+    </Drawer>
   </ThemeProvider>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, toRaw, toRef, toRefs } from 'vue'
+import { computed, onMounted, ref, toRaw, toRef, toRefs } from 'vue'
 import { schema as defaultSchema } from './templete'
 import {
   Card,
   Tabs,
   TabPane,
   Table,
-  TablePaginationConfig
+  TablePaginationConfig,
+  Drawer
 } from 'ant-design-vue'
 // @ts-ignore
 import ThemeProvider from '../themeProvider/themeProvider.vue'
@@ -120,6 +146,7 @@ import TableFormRender from '../tableFormRender/tableFormRender.vue'
 import type { TableProps } from './typing'
 import { useRequest } from 'vue-hooks-plus'
 import type { CommonResponse, ListResponse } from 'store-request'
+import FormRender from '../formRender/formRender.vue'
 
 const slot = defineSlots()
 
@@ -134,9 +161,12 @@ const props = defineProps({
   request: Function,
   list: Array,
   formatParams: Function,
-  cardStyle: Object
+  cardStyle: Object,
+  drawer: Object
 }) as TableProps
 const { onSearch = () => {} } = props
+const showDrawer = ref(false)
+const drawerFormRef = ref()
 
 const { schema, tableProps, list } = toRefs(props)
 
@@ -151,6 +181,8 @@ const {
       ...(props.schema?.tabKey && {
         [props.schema?.tabKey]: props?.schema?.tabs?.[0]?.key
       }),
+      pageNum: p?.pageNum || 1,
+      pageSize: p?.pageSize || 10,
       ...(p || {})
     })
     .then((res) => {
@@ -231,9 +263,24 @@ onMounted(() => {
   }
 })
 
+const reset = () => {
+  const lastParam = params?.value ? (params?.value?.[0] as {}) : {}
+  run({
+    ...lastParam,
+    pageNum: 1
+  })
+}
+
+const drawer = () => {
+  showDrawer.value = true
+}
+
 defineExpose({
   run,
-  params
+  reset,
+  params,
+  drawer,
+  drawerFormRef: drawerFormRef
 })
 </script>
 
