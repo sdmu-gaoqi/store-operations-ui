@@ -14,9 +14,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           always-auth: true
-          node-version: 16
-          cache: 'yarn'
-      - run: pnpm i
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm
       - run: pnpm run build
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - run: npm publish
