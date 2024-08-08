@@ -14,6 +14,10 @@ export type SchemaType =
 
 export interface SchemaBase {
   type?: SchemaType
+  /**
+   * 可以用作schema唯一标识
+   * */
+  key?: string
   title?: string
   description?: string
   descType?: 'text' | 'icon'
